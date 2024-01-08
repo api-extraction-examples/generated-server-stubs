@@ -9,7 +9,7 @@ frameworks_map = {
     'go-server': 'go',
     'nodejs-express-server': 'nodejs',
     'python-flask': 'python',
-    'spring': 'java'
+    'spring': 'spring'
 }
 
 
@@ -103,8 +103,10 @@ def main(output_file: str):
             )
             jobs.add_job(job)
     data = jobs.json()
-    with open(output_file, 'w') as file:
-        yaml.dump(data, file, default_flow_style=False)
+    if os.path.exists(output_file):
+        os.remove(output_file)
+    with open(output_file, 'w') as f:
+        yaml.dump(data, f, default_flow_style=False)
 
 
 if __name__ == '__main__':

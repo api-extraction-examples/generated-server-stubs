@@ -44,7 +44,8 @@ wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory
 # Intel product-catalogue
 wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/intel.com/product-catalogue/0.1.0/swagger.yaml -O swagger/intel-product-catalogue.yaml
 # Jellyfin local
-wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/jellyfin.local/v1/openapi.yaml -O swagger/jellyfin-local.yaml
+# Getting this error from oasdiff - diff failed with duplicate endpoint (GET /MusicGenres/{name}/InstantMix) found in analysis/base/jellyfin-local-java.yml and /analysis/base/jellyfin-local-java.yml. You may add the x-since-date extension to specify order
+#wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/jellyfin.local/v1/openapi.yaml -O swagger/jellyfin-local.yaml
 # LaunchDarkly
 wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/launchdarkly.com/5.3.0/swagger.yaml -O swagger/launchdarkly.yaml
 # Linux Foundation
@@ -74,7 +75,7 @@ wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory
 wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/parliament.uk/bills/v1/openapi.yaml -O swagger/parliament-bills.yaml
 # Probely
 # Running into openapi-generator-cli issues here, in the python-flask action.
-wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/probely.com/1.2.0/openapi.yaml -O swagger/probely.yaml
+#wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/probely.com/1.2.0/openapi.yaml -O swagger/probely.yaml
 # Twilio notify
 wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/twilio.com/twilio_notify_v1/1.52.0/openapi.yaml -O swagger/twilio-notify.yaml
 # Testfire
