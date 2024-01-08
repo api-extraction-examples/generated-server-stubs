@@ -1,0 +1,1510 @@
+openapi: 3.0.1
+info:
+  contact:
+    name: The open API platform by Mercedes-Benz
+  description: The Dealer API provides Dealer search functions.
+  title: Dealer
+  version: "1.0"
+  x-apisguru-categories:
+  - transport
+  x-logo:
+    url: https://twitter.com/MercedesBenz/profile_image?size=original
+  x-origin:
+  - format: swagger
+    url: https://developer.mercedes-benz.com/content/sites/default/files/2018-07/swagger_dealer_api_0.yaml
+    version: "2.0"
+  x-providerName: mercedes-benz.com
+  x-serviceName: dealer
+servers:
+- url: https://api.mercedes-benz.com/dealer_tryout/v1
+tags:
+- description: "Resources that provide search functions for dealers (dealer, garage,\
+    \ retailer, etc.) based on given attributes."
+  name: Dealer search
+- description: Reference data that is required for the Dealer API.
+  name: References
+paths:
+  /countries:
+    get:
+      description: This request returns the countries supported by the Dealer API
+      operationId: countriesGET
+      parameters:
+      - description: |
+          The index of the page to be returned. If this parameter is omitted, the first page will be returned.
+        in: query
+        name: page
+        schema:
+          format: int32
+          type: integer
+      - description: |
+          The index of the page to be returned. If this parameter is omitted, the first page will be returned.
+        in: query
+        name: pageSize
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HalifiedCountries'
+          description: OK
+        "400":
+          content: {}
+          description: |-
+            Invalid parameter was specified:
+             * Page is not valid
+             * Page size is not valid
+        "401":
+          content: {}
+          description: |-
+            Unauthorized:
+              * Failed to resolve API Key query parameter
+              * Invalid API Key
+        "429":
+          content: {}
+          description: Quota limit is exceeded
+        "500":
+          content: {}
+          description: Internal server error
+      tags:
+      - References
+    x-swagger-router-controller: get_countries
+  /dealers:
+    get:
+      description: "This request returns dealers (dealer, garage, retailer, etc.)\
+        \ for given parameters"
+      operationId: dealersGET
+      parameters:
+      - description: |
+          Array of dealer ids. The dealer id is dealer’s business key, also known as GS Id. e.g. GS0000857,GS0017621
+        explode: false
+        in: query
+        name: dealerIds
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The latitude geo coordinate.
+        in: query
+        name: latitude
+        schema:
+          type: number
+      - description: The longitude geo coordinate.
+        in: query
+        name: longitude
+        schema:
+          type: number
+      - description: "The radius value of the search area. The center of the search\
+          \ area is defined by geo coordinates. (latitude, longitude properties) If\
+          \ radiusValue and radiusUnit parameters are missing, then the default radius\
+          \ is 10 km."
+        in: query
+        name: radiusValue
+        schema:
+          default: 10
+          type: integer
+      - description: "The radius unit of the search area. The center of the search\
+          \ area is defined by geo coordinates. (latitude, longitude properties) If\
+          \ radiusValue and radiusUnit parameters are missing, then the default radius\
+          \ is 10 km."
+        in: query
+        name: radiusUnit
+        schema:
+          default: KM
+          enum:
+          - M
+          - KM
+          - MILE
+          type: string
+      - description: "The country of the dealer address defined as ISO two letter\
+          \ ID (e.g. DE, CH, CN, etc.)"
+        in: query
+        name: countryIsoCode
+        schema:
+          type: string
+      - description: The city of the dealer address.
+        in: query
+        name: city
+        schema:
+          type: string
+      - description: "A name of the dealer, the name filter will be applied to all\
+          \ Dealer names (e.g. legalName, nameAddition). You can also search for parts\
+          \ of Dealer names, e.g. the search term 'Niederlassung' will also match\
+          \ 'Niederlassung Stuttgart'."
+        in: query
+        name: name
+        schema:
+          type: string
+      - description: |-
+          Filter by brand, valid values are:
+            * MB: Mercedes-Benz
+            * SMT: Smart
+        in: query
+        name: brand
+        schema:
+          enum:
+          - MB
+          - SMT
+          type: string
+      - description: Filter by a product group
+        in: query
+        name: productGroup
+        schema:
+          enum:
+          - PASSENGER-CAR
+          - VAN
+          type: string
+      - description: |-
+          Filter by activity, valid actitvity values are:
+            * PARTS: Spare Parts Sales
+            * SALES: Sales of new vehicles
+            * SERVICE: Maintaining and repair
+            * USED-VEHICLES-TRADE: Sales of used vehicles
+        in: query
+        name: activity
+        schema:
+          enum:
+          - PARTS
+          - SALES
+          - SERVICE
+          - USED-VEHICLES-TRADE
+          type: string
+      - description: "Specifies which fields should be included in the result. If\
+          \ this filter is not used, per default all fields are returned. e.g. fields=dealers(dealerId,address(street,city))"
+        in: query
+        name: fields
+        schema:
+          type: string
+      - description: |
+          The index of the page to be returned. If this parameter is omitted, the first page will be returned.
+        in: query
+        name: page
+        schema:
+          format: int32
+          type: integer
+      - description: |
+          The index of the page to be returned. If this parameter is omitted, the first page will be returned.
+        in: query
+        name: pageSize
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HalifiedDealers'
+          description: OK
+        "204":
+          content: {}
+          description: The search did not match any dealers.
+        "400":
+          content: {}
+          description: |-
+            Invalid parameter was specified:
+             * DealerId is not valid
+             * Area search is not valid (latitude or longitude missing or invalid)
+             * Country ISO code is not valid
+             * Brand code is not valid
+             * Product group is not valid
+             * Activity is not valid
+             * Page is not valid
+             * Page size is not valid
+        "401":
+          content: {}
+          description: |-
+            Unauthorized:
+              * Failed to resolve API Key query parameter
+              * Invalid API Key
+        "429":
+          content: {}
+          description: Quota limit is exceeded
+        "500":
+          content: {}
+          description: Internal server error
+      tags:
+      - Dealer search
+    x-swagger-router-controller: get_dealers
+  /dealers/{dealerId}:
+    get:
+      description: This request returns dealers for given parameters
+      operationId: dealerGET
+      parameters:
+      - description: "The dealer id is dealer’s business key, also known as GS Id.\
+          \ e.g. GS0000857"
+        in: path
+        name: dealerId
+        required: true
+        schema:
+          default: GS0000275
+          type: string
+      - description: "Specifies which fields should be included in the result. If\
+          \ this filter is not used, per default all fields are returned. e.g. fields=dealerId,address(street,city)"
+        in: query
+        name: fields
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dealer'
+          description: OK
+        "400":
+          content: {}
+          description: Invalid format for parameter dealerId was specified
+        "401":
+          content: {}
+          description: |-
+            Unauthorized:
+              * Failed to resolve API Key query parameter
+              * Invalid API Key
+        "404":
+          content: {}
+          description: Dealer not found
+        "429":
+          content: {}
+          description: Quota limit is exceeded
+        "500":
+          content: {}
+          description: Internal server error
+      tags:
+      - Dealer search
+    x-swagger-router-controller: get_dealer_by_id
+components:
+  parameters:
+    activity:
+      description: |-
+        Filter by activity, valid actitvity values are:
+          * PARTS: Spare Parts Sales
+          * SALES: Sales of new vehicles
+          * SERVICE: Maintaining and repair
+          * USED-VEHICLES-TRADE: Sales of used vehicles
+      in: query
+      name: activity
+      schema:
+        enum:
+        - PARTS
+        - SALES
+        - SERVICE
+        - USED-VEHICLES-TRADE
+        type: string
+    brand:
+      description: |-
+        Filter by brand, valid values are:
+          * MB: Mercedes-Benz
+          * SMT: Smart
+      in: query
+      name: brand
+      schema:
+        enum:
+        - MB
+        - SMT
+        type: string
+    city:
+      description: The city of the dealer address.
+      in: query
+      name: city
+      schema:
+        type: string
+    countryIsoCode:
+      description: "The country of the dealer address defined as ISO two letter ID\
+        \ (e.g. DE, CH, CN, etc.)"
+      in: query
+      name: countryIsoCode
+      schema:
+        type: string
+    dealerId:
+      description: "The dealer id is dealer’s business key, also known as GS Id. e.g.\
+        \ GS0000857"
+      in: path
+      name: dealerId
+      required: true
+      schema:
+        default: GS0000275
+        type: string
+    dealerIds:
+      description: |
+        Array of dealer ids. The dealer id is dealer’s business key, also known as GS Id. e.g. GS0000857,GS0017621
+      explode: false
+      in: query
+      name: dealerIds
+      schema:
+        items:
+          type: string
+        type: array
+      style: form
+    fieldsForDealer:
+      description: "Specifies which fields should be included in the result. If this\
+        \ filter is not used, per default all fields are returned. e.g. fields=dealerId,address(street,city)"
+      in: query
+      name: fields
+      schema:
+        type: string
+    fieldsForDealers:
+      description: "Specifies which fields should be included in the result. If this\
+        \ filter is not used, per default all fields are returned. e.g. fields=dealers(dealerId,address(street,city))"
+      in: query
+      name: fields
+      schema:
+        type: string
+    latitude:
+      description: The latitude geo coordinate.
+      in: query
+      name: latitude
+      schema:
+        type: number
+    legalName:
+      description: "A name of the dealer, the name filter will be applied to all Dealer\
+        \ names (e.g. legalName, nameAddition). You can also search for parts of Dealer\
+        \ names, e.g. the search term 'Niederlassung' will also match 'Niederlassung\
+        \ Stuttgart'."
+      in: query
+      name: name
+      schema:
+        type: string
+    longitude:
+      description: The longitude geo coordinate.
+      in: query
+      name: longitude
+      schema:
+        type: number
+    page:
+      description: |
+        The index of the page to be returned. If this parameter is omitted, the first page will be returned.
+      in: query
+      name: page
+      schema:
+        format: int32
+        type: integer
+    pageSize:
+      description: |
+        The index of the page to be returned. If this parameter is omitted, the first page will be returned.
+      in: query
+      name: pageSize
+      schema:
+        format: int32
+        type: integer
+    productGroup:
+      description: Filter by a product group
+      in: query
+      name: productGroup
+      schema:
+        enum:
+        - PASSENGER-CAR
+        - VAN
+        type: string
+    radiusUnit:
+      description: "The radius unit of the search area. The center of the search area\
+        \ is defined by geo coordinates. (latitude, longitude properties) If radiusValue\
+        \ and radiusUnit parameters are missing, then the default radius is 10 km."
+      in: query
+      name: radiusUnit
+      schema:
+        default: KM
+        enum:
+        - M
+        - KM
+        - MILE
+        type: string
+    radiusValue:
+      description: "The radius value of the search area. The center of the search\
+        \ area is defined by geo coordinates. (latitude, longitude properties) If\
+        \ radiusValue and radiusUnit parameters are missing, then the default radius\
+        \ is 10 km."
+      in: query
+      name: radiusValue
+      schema:
+        default: 10
+        type: integer
+  schemas:
+    ActivityOfAFunction:
+      example:
+        code: code
+        name: name
+      properties:
+        code:
+          description: |-
+            The activity of the dealer, valid actitvity values are:
+              * PARTS: Spare Parts Sales
+              * SALES: Sales of new vehicles
+              * SERVICE: Maintaining and repair
+              * USED-VEHICLES-TRADE: Sales of used vehicles
+          type: string
+        name:
+          description: the corresponding activity name
+          type: string
+      required:
+      - code
+      - name
+      type: object
+    Address:
+      example:
+        zipCode: zipCode
+        addressAddition: addressAddition
+        city: city
+        countryIsoCode: countryIsoCode
+        street: street
+        district: district
+      properties:
+        addressAddition:
+          description: address addition
+          type: string
+        city:
+          description: city
+          type: string
+        countryIsoCode:
+          description: ISO A2 country code
+          type: string
+        district:
+          description: "district, area of city"
+          type: string
+        street:
+          description: "street and house number, if applicable"
+          type: string
+        zipCode:
+          description: postal code
+          type: string
+      type: object
+    Brand:
+      example:
+        code: code
+        name: name
+      properties:
+        code:
+          description: brand qualifier
+          type: string
+        name:
+          description: brand name
+          type: string
+      required:
+      - code
+      - name
+      type: object
+    BrandCode:
+      example:
+        brand:
+          code: code
+          name: name
+      properties:
+        brand:
+          $ref: '#/components/schemas/Brand'
+      required:
+      - brand
+      type: object
+    CommunicationChannels:
+      example:
+        general:
+          twitter: twitter
+          website: website
+          phone: phone
+          facebook: facebook
+          mobile: mobile
+          fax: fax
+          email: email
+          googlePlus: googlePlus
+      properties:
+        general:
+          $ref: '#/components/schemas/General'
+      type: object
+    Country:
+      example:
+        isoCode: isoCode
+        name: name
+        countryId: countryId
+      properties:
+        countryId:
+          description: the country id
+          type: string
+        isoCode:
+          description: the country iso code
+          type: string
+        name:
+          description: the country name
+          type: string
+      required:
+      - countryId
+      - isoCode
+      - name
+      type: object
+    Dealer:
+      description: the representation of an dealer
+      example:
+        legalName: legalName
+        brandCodes:
+        - brand:
+            code: code
+            name: name
+        - brand:
+            code: code
+            name: name
+        address:
+          zipCode: zipCode
+          addressAddition: addressAddition
+          city: city
+          countryIsoCode: countryIsoCode
+          street: street
+          district: district
+        distance:
+          unit: M
+          value: 0.8008281904610115
+        functions:
+        - activity:
+            code: code
+            name: name
+          productGroup:
+            code: code
+            name: name
+          brand:
+            code: code
+            name: name
+        - activity:
+            code: code
+            name: name
+          productGroup:
+            code: code
+            name: name
+          brand:
+            code: code
+            name: name
+        _links:
+          self:
+            href: href
+        dealerId: dealerId
+        nameAddition: nameAddition
+        openingHours:
+        - weekdays:
+            WEDNESDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            MONDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            THURSDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            SUNDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            FRIDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            TUESDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            SATURDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+          function:
+            activity:
+              code: code
+              name: name
+            productGroup:
+              code: code
+              name: name
+            brand:
+              code: code
+              name: name
+        - weekdays:
+            WEDNESDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            MONDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            THURSDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            SUNDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            FRIDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            TUESDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+            SATURDAY:
+              periods:
+              - from: from
+                until: until
+              - from: from
+                until: until
+              status: OPEN
+          function:
+            activity:
+              code: code
+              name: name
+            productGroup:
+              code: code
+              name: name
+            brand:
+              code: code
+              name: name
+        geoCoordinates:
+          latitude: 6.027456183070403
+          longitude: 1.4658129805029452
+        communication:
+          general:
+            twitter: twitter
+            website: website
+            phone: phone
+            facebook: facebook
+            mobile: mobile
+            fax: fax
+            email: email
+            googlePlus: googlePlus
+        region:
+          subRegion: subRegion
+          region: region
+      properties:
+        _links:
+          $ref: '#/components/schemas/SelfLink'
+        address:
+          $ref: '#/components/schemas/Address'
+        brandCodes:
+          description: "network brand codes of the dealer, dealer numbers"
+          items:
+            $ref: '#/components/schemas/BrandCode'
+          type: array
+        communication:
+          $ref: '#/components/schemas/CommunicationChannels'
+        dealerId:
+          description: "GSSN unique ID, main identifier"
+          type: string
+        distance:
+          $ref: '#/components/schemas/TheDistance'
+        functions:
+          description: list of functions for the dealer
+          items:
+            $ref: '#/components/schemas/Function'
+          type: array
+          uniqueItems: true
+        geoCoordinates:
+          $ref: '#/components/schemas/GeoCoordinates'
+        legalName:
+          description: legal name of the company
+          type: string
+        nameAddition:
+          description: "name addition, country specific use"
+          type: string
+        openingHours:
+          description: |
+            List of opening hours for each customer relevant function for
+            each day
+          items:
+            $ref: '#/components/schemas/FunctionOpeningHours'
+          type: array
+          uniqueItems: true
+        region:
+          $ref: '#/components/schemas/RegionRepresentation'
+      required:
+      - _links
+      - dealerId
+      - legalName
+      type: object
+    DefaultLinks:
+      description: default links
+      example:
+        next:
+          href: href
+        previous:
+          href: href
+        self:
+          href: href
+      properties:
+        next:
+          $ref: '#/components/schemas/Link'
+        previous:
+          $ref: '#/components/schemas/Link'
+        self:
+          $ref: '#/components/schemas/Link'
+      type: object
+    Function:
+      example:
+        activity:
+          code: code
+          name: name
+        productGroup:
+          code: code
+          name: name
+        brand:
+          code: code
+          name: name
+      properties:
+        activity:
+          $ref: '#/components/schemas/ActivityOfAFunction'
+        brand:
+          $ref: '#/components/schemas/Brand'
+        productGroup:
+          $ref: '#/components/schemas/ProductGroupOfAFunction'
+      required:
+      - activity
+      - brand
+      - productGroup
+      type: object
+    FunctionOpeningHours:
+      example:
+        weekdays:
+          WEDNESDAY:
+            periods:
+            - from: from
+              until: until
+            - from: from
+              until: until
+            status: OPEN
+          MONDAY:
+            periods:
+            - from: from
+              until: until
+            - from: from
+              until: until
+            status: OPEN
+          THURSDAY:
+            periods:
+            - from: from
+              until: until
+            - from: from
+              until: until
+            status: OPEN
+          SUNDAY:
+            periods:
+            - from: from
+              until: until
+            - from: from
+              until: until
+            status: OPEN
+          FRIDAY:
+            periods:
+            - from: from
+              until: until
+            - from: from
+              until: until
+            status: OPEN
+          TUESDAY:
+            periods:
+            - from: from
+              until: until
+            - from: from
+              until: until
+            status: OPEN
+          SATURDAY:
+            periods:
+            - from: from
+              until: until
+            - from: from
+              until: until
+            status: OPEN
+        function:
+          activity:
+            code: code
+            name: name
+          productGroup:
+            code: code
+            name: name
+          brand:
+            code: code
+            name: name
+      properties:
+        function:
+          $ref: '#/components/schemas/Function'
+        weekdays:
+          $ref: '#/components/schemas/Weekdays'
+      type: object
+    General:
+      example:
+        twitter: twitter
+        website: website
+        phone: phone
+        facebook: facebook
+        mobile: mobile
+        fax: fax
+        email: email
+        googlePlus: googlePlus
+      properties:
+        email:
+          description: general email address
+          type: string
+        facebook:
+          description: general facebook URL
+          type: string
+        fax:
+          description: general fax number
+          type: string
+        googlePlus:
+          description: general googlePlus account name
+          type: string
+        mobile:
+          description: general mobile phone number
+          type: string
+        phone:
+          description: general phone number
+          type: string
+        twitter:
+          description: general twitter account name
+          type: string
+        website:
+          description: general website
+          type: string
+      type: object
+    GeoCoordinates:
+      example:
+        latitude: 6.027456183070403
+        longitude: 1.4658129805029452
+      properties:
+        latitude:
+          description: latitude - in decimal degrees
+          format: double
+          type: number
+        longitude:
+          description: longitude - in decimal degrees
+          format: double
+          type: number
+      required:
+      - latitude
+      - longitude
+      type: object
+    HalifiedCountries:
+      description: countries and navigation links for additional results.
+      example:
+        _links:
+          next:
+            href: href
+          previous:
+            href: href
+          self:
+            href: href
+        countries:
+        - isoCode: isoCode
+          name: name
+          countryId: countryId
+        - isoCode: isoCode
+          name: name
+          countryId: countryId
+      properties:
+        _links:
+          $ref: '#/components/schemas/DefaultLinks'
+        countries:
+          description: countries
+          items:
+            $ref: '#/components/schemas/Country'
+          type: array
+      required:
+      - _links
+      type: object
+    HalifiedDealers:
+      description: dealer with navigation links.
+      example:
+        _links:
+          next:
+            href: href
+          previous:
+            href: href
+          self:
+            href: href
+        dealers:
+        - legalName: legalName
+          brandCodes:
+          - brand:
+              code: code
+              name: name
+          - brand:
+              code: code
+              name: name
+          address:
+            zipCode: zipCode
+            addressAddition: addressAddition
+            city: city
+            countryIsoCode: countryIsoCode
+            street: street
+            district: district
+          distance:
+            unit: M
+            value: 0.8008281904610115
+          functions:
+          - activity:
+              code: code
+              name: name
+            productGroup:
+              code: code
+              name: name
+            brand:
+              code: code
+              name: name
+          - activity:
+              code: code
+              name: name
+            productGroup:
+              code: code
+              name: name
+            brand:
+              code: code
+              name: name
+          _links:
+            self:
+              href: href
+          dealerId: dealerId
+          nameAddition: nameAddition
+          openingHours:
+          - weekdays:
+              WEDNESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              MONDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              THURSDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SUNDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              FRIDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              TUESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SATURDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+            function:
+              activity:
+                code: code
+                name: name
+              productGroup:
+                code: code
+                name: name
+              brand:
+                code: code
+                name: name
+          - weekdays:
+              WEDNESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              MONDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              THURSDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SUNDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              FRIDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              TUESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SATURDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+            function:
+              activity:
+                code: code
+                name: name
+              productGroup:
+                code: code
+                name: name
+              brand:
+                code: code
+                name: name
+          geoCoordinates:
+            latitude: 6.027456183070403
+            longitude: 1.4658129805029452
+          communication:
+            general:
+              twitter: twitter
+              website: website
+              phone: phone
+              facebook: facebook
+              mobile: mobile
+              fax: fax
+              email: email
+              googlePlus: googlePlus
+          region:
+            subRegion: subRegion
+            region: region
+        - legalName: legalName
+          brandCodes:
+          - brand:
+              code: code
+              name: name
+          - brand:
+              code: code
+              name: name
+          address:
+            zipCode: zipCode
+            addressAddition: addressAddition
+            city: city
+            countryIsoCode: countryIsoCode
+            street: street
+            district: district
+          distance:
+            unit: M
+            value: 0.8008281904610115
+          functions:
+          - activity:
+              code: code
+              name: name
+            productGroup:
+              code: code
+              name: name
+            brand:
+              code: code
+              name: name
+          - activity:
+              code: code
+              name: name
+            productGroup:
+              code: code
+              name: name
+            brand:
+              code: code
+              name: name
+          _links:
+            self:
+              href: href
+          dealerId: dealerId
+          nameAddition: nameAddition
+          openingHours:
+          - weekdays:
+              WEDNESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              MONDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              THURSDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SUNDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              FRIDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              TUESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SATURDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+            function:
+              activity:
+                code: code
+                name: name
+              productGroup:
+                code: code
+                name: name
+              brand:
+                code: code
+                name: name
+          - weekdays:
+              WEDNESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              MONDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              THURSDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SUNDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              FRIDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              TUESDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+              SATURDAY:
+                periods:
+                - from: from
+                  until: until
+                - from: from
+                  until: until
+                status: OPEN
+            function:
+              activity:
+                code: code
+                name: name
+              productGroup:
+                code: code
+                name: name
+              brand:
+                code: code
+                name: name
+          geoCoordinates:
+            latitude: 6.027456183070403
+            longitude: 1.4658129805029452
+          communication:
+            general:
+              twitter: twitter
+              website: website
+              phone: phone
+              facebook: facebook
+              mobile: mobile
+              fax: fax
+              email: email
+              googlePlus: googlePlus
+          region:
+            subRegion: subRegion
+            region: region
+      properties:
+        _links:
+          $ref: '#/components/schemas/DefaultLinks'
+        dealers:
+          description: dealers
+          items:
+            $ref: '#/components/schemas/Dealer'
+          type: array
+      required:
+      - _links
+      type: object
+    Link:
+      description: the representation of a link
+      example:
+        href: href
+      properties:
+        href:
+          description: the target of the link
+          type: string
+      required:
+      - href
+      type: object
+    Periods:
+      example:
+        from: from
+        until: until
+      properties:
+        from:
+          description: from
+          type: string
+        until:
+          description: until
+          type: string
+      required:
+      - from
+      - until
+      type: object
+    ProductGroupOfAFunction:
+      example:
+        code: code
+        name: name
+      properties:
+        code:
+          description: |-
+            The product group code, valid values are:
+              * PASSENGER-CAR
+              * VAN
+          type: string
+        name:
+          description: product group name
+          type: string
+      required:
+      - code
+      - name
+      type: object
+    RegionRepresentation:
+      example:
+        subRegion: subRegion
+        region: region
+      properties:
+        region:
+          description: region
+          type: string
+        subRegion:
+          description: subregion
+          type: string
+      type: object
+    SelfLink:
+      description: self links
+      example:
+        self:
+          href: href
+      properties:
+        self:
+          $ref: '#/components/schemas/Link'
+      type: object
+    TheDistance:
+      example:
+        unit: M
+        value: 0.8008281904610115
+      properties:
+        unit:
+          description: unit of length
+          enum:
+          - M
+          - KM
+          - MILE
+          type: string
+        value:
+          description: numeric amount of distance
+          format: double
+          type: number
+      required:
+      - value
+      type: object
+    WeekdayInfo:
+      example:
+        periods:
+        - from: from
+          until: until
+        - from: from
+          until: until
+        status: OPEN
+      properties:
+        periods:
+          description: time periods
+          items:
+            $ref: '#/components/schemas/Periods'
+          type: array
+        status:
+          description: status (OPEN or CLOSED)
+          enum:
+          - OPEN
+          - CLOSED
+          type: string
+      type: object
+    Weekdays:
+      description: |
+        opening hours for a week, represented by a map where the key
+        is a weekday and the value is an object containing the time periods. There
+        are a maximum of two time slots for each day. If there exists no opening
+        hours for one day, they will be shown as closed.
+      example:
+        WEDNESDAY:
+          periods:
+          - from: from
+            until: until
+          - from: from
+            until: until
+          status: OPEN
+        MONDAY:
+          periods:
+          - from: from
+            until: until
+          - from: from
+            until: until
+          status: OPEN
+        THURSDAY:
+          periods:
+          - from: from
+            until: until
+          - from: from
+            until: until
+          status: OPEN
+        SUNDAY:
+          periods:
+          - from: from
+            until: until
+          - from: from
+            until: until
+          status: OPEN
+        FRIDAY:
+          periods:
+          - from: from
+            until: until
+          - from: from
+            until: until
+          status: OPEN
+        TUESDAY:
+          periods:
+          - from: from
+            until: until
+          - from: from
+            until: until
+          status: OPEN
+        SATURDAY:
+          periods:
+          - from: from
+            until: until
+          - from: from
+            until: until
+          status: OPEN
+      properties:
+        FRIDAY:
+          $ref: '#/components/schemas/WeekdayInfo'
+        MONDAY:
+          $ref: '#/components/schemas/WeekdayInfo'
+        SATURDAY:
+          $ref: '#/components/schemas/WeekdayInfo'
+        SUNDAY:
+          $ref: '#/components/schemas/WeekdayInfo'
+        THURSDAY:
+          $ref: '#/components/schemas/WeekdayInfo'
+        TUESDAY:
+          $ref: '#/components/schemas/WeekdayInfo'
+        WEDNESDAY:
+          $ref: '#/components/schemas/WeekdayInfo'
+      type: object
+x-default-apikey: Tyt82ndiKG0AdH8TCqe001ROh7RsGOKB
+x-original-swagger-version: "2.0"

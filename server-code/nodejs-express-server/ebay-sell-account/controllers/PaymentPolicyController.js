@@ -1,0 +1,43 @@
+/**
+ * The PaymentPolicyController file is a very simple one, which does not need to be changed manually,
+ * unless there's a case where business logic routes the request to an entity which is not
+ * the service.
+ * The heavy lifting of the Controller item is done in Request.js - that is where request
+ * parameters are extracted and sent to the service, and where response is handled.
+ */
+
+const Controller = require('./Controller');
+const service = require('../services/PaymentPolicyService');
+const createPaymentPolicy = async (request, response) => {
+  await Controller.handleRequest(request, response, service.createPaymentPolicy);
+};
+
+const deletePaymentPolicy = async (request, response) => {
+  await Controller.handleRequest(request, response, service.deletePaymentPolicy);
+};
+
+const getPaymentPolicies = async (request, response) => {
+  await Controller.handleRequest(request, response, service.getPaymentPolicies);
+};
+
+const getPaymentPolicy = async (request, response) => {
+  await Controller.handleRequest(request, response, service.getPaymentPolicy);
+};
+
+const getPaymentPolicyByName = async (request, response) => {
+  await Controller.handleRequest(request, response, service.getPaymentPolicyByName);
+};
+
+const updatePaymentPolicy = async (request, response) => {
+  await Controller.handleRequest(request, response, service.updatePaymentPolicy);
+};
+
+
+module.exports = {
+  createPaymentPolicy,
+  deletePaymentPolicy,
+  getPaymentPolicies,
+  getPaymentPolicy,
+  getPaymentPolicyByName,
+  updatePaymentPolicy,
+};

@@ -1,0 +1,1650 @@
+openapi: 3.0.2
+info:
+  contact:
+    email: nishu@mediumapi.com
+    name: Nishu Jain
+    url: https://mediumapi.com
+  description: "Medium API helps you to quickly extract data from Medium's Website\
+    \ (https://medium.com). \n\nYou can gather data related to users, publications,\
+    \ articles (including its textual content), latest posts &amp; top writers within\
+    \ a topic/niche, etc…\n"
+  termsOfService: https://github.com/weeping-angel/medium-apis/raw/pages/terms_of_use.pdf
+  title: Medium API
+  version: "1.0"
+  x-apisguru-categories:
+  - media
+  - social
+  x-linkedin: https://www.linkedin.com/company/medium-api
+  x-logo:
+    url: https://raw.githubusercontent.com/Medium/medium-logos/master/monogram/Monogram.png
+  x-origin:
+  - format: openapi
+    url: blob:https://docs.mediumapi.com/blobId
+    version: "3.0"
+  x-providerName: medium.com
+  x-tags:
+  - blog
+  - social journalism
+  - publishing platform
+  x-twitter: https://twitter.com/medium_api
+  x-unofficialSpec: false
+externalDocs:
+  description: Read more on Medium
+  url: https://github.com/Medium/medium-api-docs
+servers:
+- url: https://medium2.p.rapidapi.com
+tags:
+- name: Welcome
+- name: User
+- name: Publication
+- name: Article
+- name: Misc
+- name: List
+- name: Search
+paths:
+  /:
+    get:
+      description: |
+        **Test Endpoint**
+        Returns the information about the Medium API
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/__get_200_response'
+          description: OK
+      summary: Get Welcome
+      tags:
+      - Welcome
+  /article/{article_id}:
+    get:
+      description: |
+        Returns the article related information such as *Title, Subtitle, Tags,  Topics* (assigned by Medium), *Publication, Published date and time,  Clap Count, Voter Count, Word Count, Reading Time, Language, etc…*
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Article.
+        explode: false
+        in: path
+        name: article_id
+        required: true
+        schema:
+          example: f06086080568
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_article__article_id__get_200_response'
+          description: OK
+      summary: Get Article Info
+      tags:
+      - Article
+  /article/{article_id}/content:
+    get:
+      description: |
+        Returns the content of an article/story, for the corresponding `article_id`
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Article.
+        explode: false
+        in: path
+        name: article_id
+        required: true
+        schema:
+          example: 562c5821b5f0
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_article__article_id__content_get_200_response'
+          description: OK
+      summary: Get Article's Content
+      tags:
+      - Article
+  /article/{article_id}/fans:
+    get:
+      description: |
+        Returns a list of `user_ids` of the people who clapped on the article (a.k.a `voters`).
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Article.
+        explode: false
+        in: path
+        name: article_id
+        required: true
+        schema:
+          example: 67fa62fc1971
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_article__article_id__fans_get_200_response'
+          description: OK
+      summary: Get Article Fans
+      tags:
+      - Article
+  /article/{article_id}/markdown:
+    get:
+      description: |
+        Returns the markdown of an article/story from Medium, for the corresponding `article_id`
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Article.
+        explode: false
+        in: path
+        name: article_id
+        required: true
+        schema:
+          example: 67fa62fc1971
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_article__article_id__markdown_get_200_response'
+          description: OK
+      summary: Get Article's Markdown
+      tags:
+      - Article
+  /article/{article_id}/related:
+    get:
+      description: |
+        Returns a list of `article_ids` of the related posts. (Length = 5)
+
+        **Note:** If the given article is self-published, related posts will belong to the same author,  else related posts will belong to the publication in which the article is published.
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Article.
+        explode: false
+        in: path
+        name: article_id
+        required: true
+        schema:
+          example: 67fa62fc1971
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_article__article_id__related_get_200_response'
+          description: OK
+      summary: Get Related Articles
+      tags:
+      - Article
+  /article/{article_id}/responses:
+    get:
+      description: |
+        Returns a list of responses (`response_ids`, same as `article_ids`) for a given article (`article_id`)
+        Note: To see the content of the response, use the "Get Article's Content" endpoint
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Article.
+        explode: false
+        in: path
+        name: article_id
+        required: true
+        schema:
+          example: 67fa62fc1971
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_article__article_id__responses_get_200_response'
+          description: OK
+      summary: Get Article Responses
+      tags:
+      - Article
+  /latestposts/{topic_slug}:
+    get:
+      description: |
+        Returns a list of latest posts (`article_ids`) for a topic/niche (as classified by the Medium platform). Example of a topic/niche can be:
+        * blockchain
+        * relationships
+        * mental-health, etc …
+
+        These are known as `topic_slugs`. At any given moment, this endpoint will return a list of 25 articles (`article_ids`).
+      parameters:
+      - description: "It's a unique string, usually hyphen-separated, representing\
+          \ a topic/niche, as classified by Medium."
+        explode: false
+        in: path
+        name: topic_slug
+        required: true
+        schema:
+          example: artificial-intelligence
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_latestposts__topic_slug__get_200_response'
+          description: OK
+      summary: Get Latest Posts
+      tags:
+      - Misc
+  /list/{list_id}:
+    get:
+      description: |
+        Returns the list-related information such as *id, name, author, description,  thumbnail image url, creation datetime, last article inserted datetime,  number of articles in the list, claps, voters, and comments/responses*.
+      parameters:
+      - description: It's a unique hash id assigned to every Medium List.
+        explode: false
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: 38f9e0f9bea6
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_list__list_id__get_200_response'
+          description: OK
+      summary: Get List Info
+      tags:
+      - List
+  /list/{list_id}/articles:
+    get:
+      description: |
+        Returns an array of `articles_ids` present in the given Medium List.
+      parameters:
+      - description: It's a unique hash id assigned to every Medium List.
+        explode: false
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: 38f9e0f9bea6
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_list__list_id__articles_get_200_response'
+          description: OK
+      summary: Get List Articles
+      tags:
+      - List
+  /list/{list_id}/responses:
+    get:
+      description: |
+        Returns an array of `response_ids` of the comments (same as `article_ids`) on the given Medium List.
+      parameters:
+      - description: It's a unique hash id assigned to every Medium List.
+        explode: false
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: 38f9e0f9bea6
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_list__list_id__responses_get_200_response'
+          description: OK
+      summary: Get List Responses
+      tags:
+      - List
+  /publication/id_for/{publication_slug}:
+    get:
+      description: |
+        Returns the unique `publication_id` for the given `publication_slug`.
+
+        **Note:** You can find the `publication_slug` from the publication's homepage URL.
+        - medium.com/**publication_slug**
+      parameters:
+      - description: It's a lowercased hyphen-separated unique string alloted to each
+          Medium Publication.
+        explode: false
+        in: path
+        name: publication_slug
+        required: true
+        schema:
+          example: codex
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_publication_id_for__publication_slug__get_200_response'
+          description: OK
+      summary: Get Publication ID
+      tags:
+      - Publication
+  /publication/{publication_id}:
+    get:
+      description: |
+        Returns the publication related information such as *Publication name, Tagline, Description, Tags, Followers Count, Twitter username, Instagram username, Facebook Page name, etc …*
+
+        **Note:** If you don't know the `publication_id`, you can get it from any article published by it. Use endpoint "/article/{article_id}" to retrieve the `publication_id`.
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Publication.
+        explode: false
+        in: path
+        name: publication_id
+        required: true
+        schema:
+          example: 98111c9905da
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_publication__publication_id__get_200_response'
+          description: OK
+      summary: Get Publication Info
+      tags:
+      - Publication
+  /publication/{publication_id}/articles:
+    get:
+      description: |
+        Returns the list of `articles_ids`, of the latest 25 articles, posted in that publication.
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Publication.
+        explode: false
+        in: path
+        name: publication_id
+        required: true
+        schema:
+          example: 98111c9905da
+          type: string
+        style: simple
+      - description: To get the articles before specified date and time.
+        explode: true
+        in: query
+        name: from
+        required: false
+        schema:
+          example: 2023-01-31T13:10:00
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_publication__publication_id__articles_get_200_response'
+          description: OK
+      summary: Get Publication Articles
+      tags:
+      - Publication
+  /publication/{publication_id}/newsletter:
+    get:
+      description: |
+        Returns the newsletter related information such as *id, name, description, slug, creator_id, subscribers, image_url, etc …*
+
+        **Note:** If you don't know the `publication_id`, you can get it from any article published by it. Use endpoint "/article/{article_id}" to retrieve the `publication_id`.
+      parameters:
+      - description: It's a unique hash id assigned to every Medium Publication.
+        explode: false
+        in: path
+        name: publication_id
+        required: true
+        schema:
+          example: 98111c9905da
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_publication__publication_id__newsletter_get_200_response'
+          description: OK
+      summary: Get Publication Newsletter
+      tags:
+      - Publication
+  /related_tags/{tag}:
+    get:
+      description: |
+        Returns a list of `related_tags` for the given `tag`.
+      parameters:
+      - description: "It's a unique string, usually hyphen-separated, representing\
+          \ a class of content."
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          example: blockchain
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_related_tags__tag__get_200_response'
+          description: OK
+      summary: Get Related Tags
+      tags:
+      - Misc
+  /search/articles?query={query}:
+    get:
+      description: |
+        Returns the list of `articles_ids` for the given search query results. (Max Length = 1000)
+      parameters:
+      - description: Search query
+        explode: true
+        in: query
+        name: query
+        required: true
+        schema:
+          example: startup
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_search_articles_query__query__get_200_response'
+          description: OK
+      summary: Search Articles
+      tags:
+      - Search
+  /search/lists?query={query}:
+    get:
+      description: |
+        Returns an array of `list_ids` for the given search query results. (Max Length = 1000)
+      parameters:
+      - description: Search query
+        explode: true
+        in: query
+        name: query
+        required: true
+        schema:
+          example: artificial intelligence
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_search_lists_query__query__get_200_response'
+          description: OK
+      summary: Search Lists
+      tags:
+      - Search
+  /search/publications?query={query}:
+    get:
+      description: |
+        Returns the list of `publication_ids` for the given search query results. (Max Length = 1000)
+      parameters:
+      - description: Search query
+        explode: true
+        in: query
+        name: query
+        required: true
+        schema:
+          example: mental health
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_search_publications_query__query__get_200_response'
+          description: OK
+      summary: Search Publications
+      tags:
+      - Search
+  /search/tags?query={query}:
+    get:
+      description: |
+        Returns a list of `tags` for the given search query results. (Max Length = 1000)
+      parameters:
+      - description: Search query
+        explode: true
+        in: query
+        name: query
+        required: true
+        schema:
+          example: blockchain
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_search_tags_query__query__get_200_response'
+          description: OK
+      summary: Search Tags
+      tags:
+      - Search
+  /search/users?query={query}:
+    get:
+      description: |
+        Returns a list of `user_ids` for the given search query results. (Max Length = 1000)
+      parameters:
+      - description: Search query
+        explode: true
+        in: query
+        name: query
+        required: true
+        schema:
+          example: data engineer
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_search_users_query__query__get_200_response'
+          description: OK
+      summary: Search Users
+      tags:
+      - Search
+  /top_writer/{topic_slug}:
+    get:
+      description: "Returns a list of top writers (`user_ids`) within a particular\
+        \ topic/niche (`topic_slug`). \ne.g. \n- blockchain\n- relationships\n- artificial-intelligence,\
+        \ etc ...\n\n**Note:** You can use optional `count` query parameter to limit\
+        \ the number of results.  The maximum number of top writers within a topic/niche\
+        \ will be 250.\n"
+      parameters:
+      - description: "It's a unique string, usually hyphen-separated, representing\
+          \ a topic/niche, as classified by Medium."
+        explode: false
+        in: path
+        name: topic_slug
+        required: true
+        schema:
+          example: relationships
+          type: string
+        style: simple
+      - description: Limits the number of `article_ids` in the result.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          example: 10
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_top_writer__topic_slug__get_200_response'
+          description: OK
+      summary: Get Top Writers
+      tags:
+      - Misc
+  /topfeeds/{tag}/{mode}:
+    get:
+      description: |
+        Returns a list of `article_ids` (length: 25) for the given `tag` and `mode`.
+      parameters:
+      - description: "It's a unique string, usually hyphen-separated, representing\
+          \ a class of content."
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          example: artificial-intelligence
+          type: string
+        style: simple
+      - description: |
+          Mode:
+
+            - `hot` : For getting trending articles
+            - `new` : For getting latest articles
+            - `top_year` : For getting best articles of the year
+            - `top_month` : For getting best articles of the month
+            - `top_week` : For getting best articles of the week
+            - `top_all_time`: For getting best article of all time
+        explode: false
+        in: path
+        name: mode
+        required: true
+        schema:
+          example: new
+          type: string
+        style: simple
+      - description: To get the subsequent top feeds. (`after` &lt; 250)
+        explode: true
+        in: query
+        name: after
+        required: false
+        schema:
+          default: 0
+          example: 10
+          type: integer
+        style: form
+      - description: To limit the number of top feeds. (`count` &lt; 25)
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 25
+          example: 20
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_topfeeds__tag___mode__get_200_response'
+          description: OK
+      summary: Get Topfeeds
+      tags:
+      - Misc
+  /user/id_for/{username}:
+    get:
+      description: "Returns the unique `user_id` for the given `username`.\n\n**Note:**\
+        \ You can find the `username` from the user's/author's profile page URL. \n\
+        - **username**.medium.com\n- medium.com/@**username**\n"
+      parameters:
+      - description: It's a unique string chosen by every single Medium user.
+        explode: false
+        in: path
+        name: username
+        required: true
+        schema:
+          example: nishu-jain
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user_id_for__username__get_200_response'
+          description: OK
+      summary: Get User ID
+      tags:
+      - User
+  /user/{user_id}:
+    get:
+      description: "Returns user related information like *Full name, Bio, Followers\
+        \ count, Following count, Twitter username, Profile-image URL, User ID, etc...*\
+        \ \n\nIt takes `user_id` as the path parameter.\n\n**Note:** If you don't\
+        \ know the `user_id`, then you can get it from the endpoint\\\n'/user/id_for/{`username`}'.\n"
+      parameters:
+      - description: It's a unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 1985b61817c3
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__get_200_response'
+          description: OK
+      summary: Get User Info
+      tags:
+      - User
+  /user/{user_id}/articles:
+    get:
+      description: |
+        Returns the list of articles (`article_ids`) written by the user.
+      parameters:
+      - description: Unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 1985b61817c3
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__articles_get_200_response'
+          description: OK
+      summary: Get User's Articles
+      tags:
+      - User
+  /user/{user_id}/followers:
+    get:
+      description: |
+        Returns the list of `user_ids` of the user's followers.
+
+        **Note:** The length of this followers' list might be different from what you get in  the "Get User Info" Endpoint. It's because, this list doesn't include Medium Users who  left the platform.
+        If you really need the exact followers' count, use this endpoint to get the followers'  list and take its length as the exact followers' count
+      parameters:
+      - description: Unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 1985b61817c3
+          type: string
+        style: simple
+      - description: To limit the number of results. (count &lt; 1500)
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          example: 10
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__followers_get_200_response'
+          description: OK
+      summary: Get User Followers
+      tags:
+      - User
+  /user/{user_id}/following:
+    get:
+      description: |
+        Returns the list of `user_ids` of the user's followings.
+
+        **Note:** Currently, this list does not contain the `publication_ids` of the publications that the user is following.
+      parameters:
+      - description: Unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 14d5c41e0264
+          type: string
+        style: simple
+      - description: To limit the number of results. (count &lt; 1500)
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          example: 10
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__following_get_200_response'
+          description: OK
+      summary: Get User Following
+      tags:
+      - User
+  /user/{user_id}/interests:
+    get:
+      description: |
+        Returns a list of tags that the given user follows.
+      parameters:
+      - description: Unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 1985b61817c3
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__interests_get_200_response'
+          description: OK
+      summary: Get User's Interests
+      tags:
+      - User
+  /user/{user_id}/lists:
+    get:
+      description: |
+        Returns an array of `list_ids` created by the user.
+
+        **Note:** You can check whether the use has created lists or not beforehand. Check the  `has_list` attribute in the "Article Info" endpoint.
+      parameters:
+      - description: Unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 5142451174a3
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__lists_get_200_response'
+          description: OK
+      summary: Get User's Lists
+      tags:
+      - User
+  /user/{user_id}/publications:
+    get:
+      description: |
+        Returns a list of `publication_ids` where the user is the editor and/or creator.
+      parameters:
+      - description: Unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 14d5c41e0264
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__publications_get_200_response'
+          description: OK
+      summary: Get User's Publications
+      tags:
+      - User
+  /user/{user_id}/top_articles:
+    get:
+      description: |
+        Returns a list of `article_ids` of the top 10 articles on the user's profile, for a given `user_id`.
+      parameters:
+      - description: Unique hash id assigned to every single Medium user.
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 1985b61817c3
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_user__user_id__articles_get_200_response'
+          description: OK
+      summary: Get User's Top Articles
+      tags:
+      - User
+components:
+  schemas:
+    _search_articles_query__query__get_200_response:
+      example:
+        search_query: startup
+        articles:
+        - 6556feb21311
+        - 6556feb21311
+      properties:
+        articles:
+          items:
+            example: 6556feb21311
+            type: string
+          type: array
+        search_query:
+          example: startup
+          type: string
+      type: object
+    _search_tags_query__query__get_200_response:
+      example:
+        search_query: blockchain
+        tags:
+        - blockchain-technology
+        - blockchain-technology
+      properties:
+        search_query:
+          example: blockchain
+          type: string
+        tags:
+          items:
+            example: blockchain-technology
+            type: string
+          type: array
+      type: object
+    _article__article_id__content_get_200_response:
+      example:
+        content: |
+          Article title
+          Article Subtitle
+          Article Content ....
+      properties:
+        content:
+          example: |
+            Article title
+            Article Subtitle
+            Article Content ....
+          type: string
+      type: object
+    _latestposts__topic_slug__get_200_response:
+      example:
+        latestposts:
+        - 67fa62fc1971
+        - 67fa62fc1971
+      properties:
+        latestposts:
+          items:
+            example: 67fa62fc1971
+            type: string
+          type: array
+      type: object
+    _publication__publication_id__get_200_response:
+      example:
+        creator: 8a819983d566
+        twitter_username: towards_AI
+        description: Towards AI is the world's leading AI and technology publication.
+          Publishing unbiased AI and technology-related articles. Read by thought-leaders
+          and decision-makers around the world.
+        url: pub.towardsai.net
+        tags:
+        - ARTIFICIAL INTELLIGENCE
+        - ARTIFICIAL INTELLIGENCE
+        followers: 25260
+        facebook_pagename: towardsAl
+        name: Towards AI
+        tagline: The World's Leading AI and Technology Publication
+        id: 98111c9905da
+        instagram_username: towards_ai
+        editors:
+        - aea8a19ea239
+        - aea8a19ea239
+        slug: towards-artificial-intelligence
+      properties:
+        creator:
+          example: 8a819983d566
+          type: string
+        description:
+          example: Towards AI is the world's leading AI and technology publication.
+            Publishing unbiased AI and technology-related articles. Read by thought-leaders
+            and decision-makers around the world.
+          type: string
+        editors:
+          items:
+            example: aea8a19ea239
+            type: string
+          type: array
+        facebook_pagename:
+          example: towardsAl
+          type: string
+        followers:
+          example: 25260
+          format: int32
+          type: integer
+        id:
+          example: 98111c9905da
+          type: string
+        instagram_username:
+          example: towards_ai
+          type: string
+        name:
+          example: Towards AI
+          type: string
+        slug:
+          example: towards-artificial-intelligence
+          type: string
+        tagline:
+          example: The World's Leading AI and Technology Publication
+          type: string
+        tags:
+          items:
+            example: ARTIFICIAL INTELLIGENCE
+            type: string
+          type: array
+        twitter_username:
+          example: towards_AI
+          type: string
+        url:
+          example: pub.towardsai.net
+          type: string
+      type: object
+    _article__article_id__responses_get_200_response:
+      example:
+        responses:
+        - a9bbc22aa1e6
+        - a9bbc22aa1e6
+        id: 67fa62fc1971
+      properties:
+        id:
+          example: 67fa62fc1971
+          type: string
+        responses:
+          items:
+            example: a9bbc22aa1e6
+            type: string
+          type: array
+      type: object
+    _search_publications_query__query__get_200_response:
+      example:
+        search_query: mental health
+        publications:
+        - 8d6b8a439e32
+        - 8d6b8a439e32
+      properties:
+        publications:
+          items:
+            example: 8d6b8a439e32
+            type: string
+          type: array
+        search_query:
+          example: mental health
+          type: string
+      type: object
+    _list__list_id__responses_get_200_response:
+      example:
+        responses:
+        - f31a257b42e8
+        - f31a257b42e8
+        id: 38f9e0f9bea6
+      properties:
+        id:
+          example: 38f9e0f9bea6
+          type: string
+        responses:
+          items:
+            example: f31a257b42e8
+            type: string
+          type: array
+      type: object
+    __get_200_response:
+      example:
+        twitter: https://twitter.com/medium_api
+        website: https://mediumapi.com
+        documentation: https://docs.mediumapi.com
+        name: Medium API
+        developer: Nishu Jain
+        linkedin: https://www.linkedin.com/company/medium-api
+        email: nishu@mediumapi.com
+      properties:
+        developer:
+          description: Full name of the API's developer
+          example: Nishu Jain
+          type: string
+        documentation:
+          description: Link to the Medium API's documentation
+          example: https://docs.mediumapi.com
+          type: string
+        email:
+          description: Email ID of the developer
+          example: nishu@mediumapi.com
+          type: string
+        linkedin:
+          description: LinkedIn Page URL
+          example: https://www.linkedin.com/company/medium-api
+          type: string
+        name:
+          description: Full name of the API
+          example: Medium API
+          type: string
+        twitter:
+          description: Twitter Profile URL
+          example: https://twitter.com/medium_api
+          type: string
+        website:
+          description: Link to the Medium API's website
+          example: https://mediumapi.com
+          type: string
+      type: object
+    _user__user_id__get_200_response:
+      example:
+        has_list: true
+        allow_notes: true
+        image_url: https://miro.medium.com/1*C92Hx7k9nRM7TPlrmhgW9w.jpeg
+        is_book_author: false
+        top_writer_in:
+        - programming
+        - programming
+        twitter_username: one_anachronism
+        bio: Obsessed with Tech Biz Arts &amp; Words; Does NOT dumb down the writing;
+          Skilled Wordsmith; Delivers the best
+        is_suspended: false
+        medium_member_at: 2020-06-24 16:05:46
+        following_count: 4
+        is_writer_program_enrolled: true
+        followers_count: 450
+        fullname: Nishu Jain
+        id: 1985b61817c3
+        username: nishu-jain
+      properties:
+        allow_notes:
+          type: boolean
+        bio:
+          example: Obsessed with Tech Biz Arts &amp; Words; Does NOT dumb down the
+            writing; Skilled Wordsmith; Delivers the best
+          type: string
+        followers_count:
+          example: 450
+          format: int32
+          type: integer
+        following_count:
+          example: 4
+          format: int32
+          type: integer
+        fullname:
+          example: Nishu Jain
+          type: string
+        has_list:
+          example: true
+          type: boolean
+        id:
+          example: 1985b61817c3
+          type: string
+        image_url:
+          example: https://miro.medium.com/1*C92Hx7k9nRM7TPlrmhgW9w.jpeg
+          type: string
+        is_book_author:
+          example: false
+          type: boolean
+        is_suspended:
+          example: false
+          type: boolean
+        is_writer_program_enrolled:
+          type: boolean
+        medium_member_at:
+          example: 2020-06-24 16:05:46
+          type: string
+        top_writer_in:
+          items:
+            example: programming
+            type: string
+          type: array
+        twitter_username:
+          example: one_anachronism
+          type: string
+        username:
+          example: nishu-jain
+          type: string
+      type: object
+    _article__article_id__related_get_200_response:
+      example:
+        related_articles:
+        - f393206c6626
+        - f393206c6626
+        id: 67fa62fc1971
+      properties:
+        id:
+          example: 67fa62fc1971
+          type: string
+        related_articles:
+          items:
+            example: f393206c6626
+            type: string
+          type: array
+      type: object
+    _related_tags__tag__get_200_response:
+      example:
+        related_tags:
+        - cryptocurrency
+        - cryptocurrency
+        given_tag: blockchain
+      properties:
+        given_tag:
+          example: blockchain
+          type: string
+        related_tags:
+          items:
+            example: cryptocurrency
+            type: string
+          type: array
+      type: object
+    _article__article_id__fans_get_200_response:
+      example:
+        article_id: 67fa62fc1971
+        voters:
+        - fa40650a485
+        - fa40650a485
+        count: 145
+      properties:
+        article_id:
+          example: 67fa62fc1971
+          type: string
+        count:
+          example: 145
+          format: int32
+          type: integer
+        voters:
+          items:
+            example: fa40650a485
+            type: string
+          type: array
+      type: object
+    _user__user_id__publications_get_200_response:
+      example:
+        user_id: 14d5c41e0264
+        publications:
+        - bff2346ccdf1
+        - bff2346ccdf1
+      properties:
+        publications:
+          items:
+            example: bff2346ccdf1
+            type: string
+          type: array
+        user_id:
+          example: 14d5c41e0264
+          type: string
+      type: object
+    _article__article_id__get_200_response:
+      example:
+        is_locked: true
+        reading_time: 3.5720125786164
+        responses_count: 10
+        voters: 3
+        author: 1985b61817c3
+        image_url: https://miro.medium.com/1*W0wM9xIeeIR3_Oo0E_thaA.png
+        is_series: false
+        topics:
+        - mental-health
+        - mental-health
+        title: 4 Tips to Strengthen Your Bonds — Now
+        url: https://medium.com/age-of-awareness/re-energizing-your-relationship-in-the-midst-of-a-crisis-f06086080568
+        last_modified_at: 2021-05-28 04:22:48
+        tags:
+        - relationships
+        - relationships
+        publication_id: e7040e67514c
+        word_count: 845
+        subtitle: Re-energize your relationship in the midst of a crisis
+        id: f06086080568
+        lang: en
+        published_at: 2020-08-25 11:08:18
+        claps: 53
+      properties:
+        author:
+          example: 1985b61817c3
+          type: string
+        claps:
+          example: 53
+          format: int32
+          type: integer
+        id:
+          example: f06086080568
+          type: string
+        image_url:
+          example: https://miro.medium.com/1*W0wM9xIeeIR3_Oo0E_thaA.png
+          type: string
+        is_locked:
+          example: true
+          type: boolean
+        is_series:
+          example: false
+          type: boolean
+        lang:
+          example: en
+          type: string
+        last_modified_at:
+          example: 2021-05-28 04:22:48
+          type: string
+        publication_id:
+          example: e7040e67514c
+          type: string
+        published_at:
+          example: 2020-08-25 11:08:18
+          type: string
+        reading_time:
+          example: 3.5720125786164
+          type: number
+        responses_count:
+          example: 10
+          format: int32
+          type: integer
+        subtitle:
+          example: Re-energize your relationship in the midst of a crisis
+          type: string
+        tags:
+          items:
+            example: relationships
+            type: string
+          type: array
+        title:
+          example: 4 Tips to Strengthen Your Bonds — Now
+          type: string
+        topics:
+          items:
+            example: mental-health
+            type: string
+          type: array
+        url:
+          example: https://medium.com/age-of-awareness/re-energizing-your-relationship-in-the-midst-of-a-crisis-f06086080568
+          type: string
+        voters:
+          example: 3
+          format: int32
+          type: integer
+        word_count:
+          example: 845
+          format: int32
+          type: integer
+      type: object
+    _topfeeds__tag___mode__get_200_response:
+      example:
+        topfeeds:
+        - b2076afc4930
+        - b2076afc4930
+      properties:
+        topfeeds:
+          items:
+            example: b2076afc4930
+            type: string
+          type: array
+      type: object
+    _publication_id_for__publication_slug__get_200_response:
+      example:
+        publication_id: 29038077e4c6
+        publication_slug: codex
+      properties:
+        publication_id:
+          description: Unique hash id of the publication.
+          example: 29038077e4c6
+          type: string
+        publication_slug:
+          description: Same publication slug that you passed in the path parameters.
+          example: codex
+          type: string
+      type: object
+    _list__list_id__get_200_response:
+      example:
+        last_item_inserted_at: 2023-03-12 06:53:02
+        thumbnail: https://miro.medium.com/0*8f634a2860234802375db89fbfcccb5cc717f3fd.jpeg
+        responses_count: 1
+        voters: 1
+        author: 1985b61817c3
+        count: 18
+        name: Medium API
+        created_at: 2023-03-12 06:46:46
+        description: Collections of all the articles and resources related to Medium
+          API
+        id: 38f9e0f9bea6
+        claps: 48
+      properties:
+        author:
+          description: '`user_id` of the author'
+          example: 1985b61817c3
+          type: string
+        claps:
+          example: 48
+          format: int32
+          type: integer
+        count:
+          description: Number of articles in the list
+          example: 18
+          format: int32
+          type: integer
+        created_at:
+          example: 2023-03-12 06:46:46
+          type: string
+        description:
+          example: Collections of all the articles and resources related to Medium
+            API
+          type: string
+        id:
+          example: 38f9e0f9bea6
+          type: string
+        last_item_inserted_at:
+          example: 2023-03-12 06:53:02
+          type: string
+        name:
+          example: Medium API
+          type: string
+        responses_count:
+          example: 1
+          format: int32
+          type: integer
+        thumbnail:
+          description: Image URL
+          example: https://miro.medium.com/0*8f634a2860234802375db89fbfcccb5cc717f3fd.jpeg
+          type: string
+        voters:
+          example: 1
+          format: int32
+          type: integer
+      type: object
+    _user_id_for__username__get_200_response:
+      example:
+        id: 1985b61817c3
+      properties:
+        id:
+          description: Unique hash id of the user.
+          example: 1985b61817c3
+          type: string
+      type: object
+    _user__user_id__interests_get_200_response:
+      example:
+        tags_followed:
+        - software-engineering
+        - software-engineering
+      properties:
+        tags_followed:
+          items:
+            example: software-engineering
+            type: string
+          type: array
+      type: object
+    _publication__publication_id__newsletter_get_200_response:
+      example:
+        image: https://miro.medium.com/1*j2OVd7j2o2FHeE7T8TzpXw.png
+        subscribers: 6752
+        creator_id: aea8a19ea239
+        name: This AI newsletter is all you need
+        description: We have moved our newsletter. Subscribe → https://ws.towardsai.net/subscribe
+        id: d710a73cd042
+        slug: this-ai-newsletter-is-all-you-need
+      properties:
+        creator_id:
+          example: aea8a19ea239
+          type: string
+        description:
+          example: We have moved our newsletter. Subscribe → https://ws.towardsai.net/subscribe
+          type: string
+        id:
+          example: d710a73cd042
+          type: string
+        image:
+          example: https://miro.medium.com/1*j2OVd7j2o2FHeE7T8TzpXw.png
+          type: string
+        name:
+          example: This AI newsletter is all you need
+          type: string
+        slug:
+          example: this-ai-newsletter-is-all-you-need
+          type: string
+        subscribers:
+          example: 6752
+          format: int32
+          type: integer
+      type: object
+    _article__article_id__markdown_get_200_response:
+      example:
+        markdown: |
+          # Article title
+          ## Article Subtitle
+          Article **Content** with lot of _markups_ ....
+          ![Images Alt](Image URL)
+      properties:
+        markdown:
+          example: |
+            # Article title
+            ## Article Subtitle
+            Article **Content** with lot of _markups_ ....
+            ![Images Alt](Image URL)
+          type: string
+      type: object
+    _user__user_id__following_get_200_response:
+      example:
+        following:
+        - c61f93eeb8a5
+        - c61f93eeb8a5
+        id: 14d5c41e0264
+      properties:
+        following:
+          items:
+            example: c61f93eeb8a5
+            type: string
+          type: array
+        id:
+          example: 14d5c41e0264
+          type: string
+      type: object
+    _search_users_query__query__get_200_response:
+      example:
+        search_query: data engineer
+        users:
+        - 1985b61817c3
+        - 1985b61817c3
+      properties:
+        search_query:
+          example: data engineer
+          type: string
+        users:
+          items:
+            example: 1985b61817c3
+            type: string
+          type: array
+      type: object
+    _user__user_id__articles_get_200_response:
+      example:
+        associated_articles:
+        - 562c5821b5f0
+        - 562c5821b5f0
+      properties:
+        associated_articles:
+          items:
+            example: 562c5821b5f0
+            type: string
+          type: array
+      type: object
+    _search_lists_query__query__get_200_response:
+      example:
+        lists:
+        - a8266c175cda
+        - a8266c175cda
+        search_query: artificial intelligence
+      properties:
+        lists:
+          items:
+            example: a8266c175cda
+            type: string
+          type: array
+        search_query:
+          example: artificial intelligence
+          type: string
+      type: object
+    _top_writer__topic_slug__get_200_response:
+      example:
+        top_writers:
+        - 1985b61817c3
+        - 1985b61817c3
+      properties:
+        top_writers:
+          items:
+            example: 1985b61817c3
+            type: string
+          type: array
+      type: object
+    _user__user_id__followers_get_200_response:
+      example:
+        followers:
+        - 105e6602fb79
+        - 105e6602fb79
+        id: 14d5c41e0264
+      properties:
+        followers:
+          items:
+            example: 105e6602fb79
+            type: string
+          type: array
+        id:
+          example: 14d5c41e0264
+          type: string
+      type: object
+    _publication__publication_id__articles_get_200_response:
+      example:
+        publication_articles:
+        - 67fa62fc1971
+        - 67fa62fc1971
+      properties:
+        publication_articles:
+          items:
+            example: 67fa62fc1971
+            type: string
+          type: array
+      type: object
+    _list__list_id__articles_get_200_response:
+      example:
+        list_articles:
+        - 90a01549d8db
+        - 90a01549d8db
+        id: 38f9e0f9bea6
+      properties:
+        id:
+          example: 38f9e0f9bea6
+          type: string
+        list_articles:
+          items:
+            example: 90a01549d8db
+            type: string
+          type: array
+      type: object
+    _user__user_id__lists_get_200_response:
+      example:
+        user_id: 5142451174a3
+        lists:
+        - 95b41261bee0
+        - 95b41261bee0
+      properties:
+        lists:
+          items:
+            example: 95b41261bee0
+            type: string
+          type: array
+        user_id:
+          example: 5142451174a3
+          type: string
+      type: object
+  securitySchemes:
+    ApiHost:
+      in: header
+      name: x-rapidapi-host
+      type: apiKey
+    ApiKey:
+      in: header
+      name: x-rapidapi-key
+      type: apiKey

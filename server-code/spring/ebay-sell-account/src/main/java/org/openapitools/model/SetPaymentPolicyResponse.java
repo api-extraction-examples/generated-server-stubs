@@ -1,0 +1,359 @@
+package org.openapitools.model;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.openapitools.model.CategoryType;
+import org.openapitools.model.Deposit;
+import org.openapitools.model.Error;
+import org.openapitools.model.PaymentMethod;
+import org.openapitools.model.TimeDuration;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * Complex type that that gets populated with a response containing a payment policy.
+ */
+
+@Schema(name = "SetPaymentPolicyResponse", description = "Complex type that that gets populated with a response containing a payment policy.")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-01-06T13:50:38.845776-04:00[America/Lower_Princes]")
+public class SetPaymentPolicyResponse {
+
+  @Valid
+  private List<@Valid CategoryType> categoryTypes;
+
+  private Deposit deposit;
+
+  private String description;
+
+  private TimeDuration fullPaymentDueIn;
+
+  private Boolean immediatePay;
+
+  private String marketplaceId;
+
+  private String name;
+
+  private String paymentInstructions;
+
+  @Valid
+  private List<@Valid PaymentMethod> paymentMethods;
+
+  private String paymentPolicyId;
+
+  @Valid
+  private List<@Valid Error> warnings;
+
+  public SetPaymentPolicyResponse categoryTypes(List<@Valid CategoryType> categoryTypes) {
+    this.categoryTypes = categoryTypes;
+    return this;
+  }
+
+  public SetPaymentPolicyResponse addCategoryTypesItem(CategoryType categoryTypesItem) {
+    if (this.categoryTypes == null) {
+      this.categoryTypes = new ArrayList<>();
+    }
+    this.categoryTypes.add(categoryTypesItem);
+    return this;
+  }
+
+  /**
+   * This container indicates whether the payment business policy applies to motor vehicle listings, or if it applies to non-motor vehicle listings.
+   * @return categoryTypes
+  */
+  @Valid 
+  @Schema(name = "categoryTypes", description = "This container indicates whether the payment business policy applies to motor vehicle listings, or if it applies to non-motor vehicle listings.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("categoryTypes")
+  public List<@Valid CategoryType> getCategoryTypes() {
+    return categoryTypes;
+  }
+
+  public void setCategoryTypes(List<@Valid CategoryType> categoryTypes) {
+    this.categoryTypes = categoryTypes;
+  }
+
+  public SetPaymentPolicyResponse deposit(Deposit deposit) {
+    this.deposit = deposit;
+    return this;
+  }
+
+  /**
+   * Get deposit
+   * @return deposit
+  */
+  @Valid 
+  @Schema(name = "deposit", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("deposit")
+  public Deposit getDeposit() {
+    return deposit;
+  }
+
+  public void setDeposit(Deposit deposit) {
+    this.deposit = deposit;
+  }
+
+  public SetPaymentPolicyResponse description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * A seller-defined description of the payment business policy. This description is only for the seller's use, and is not exposed on any eBay pages. This field is returned if set for the policy. <br/><br/><b>Max length</b>: 250
+   * @return description
+  */
+  
+  @Schema(name = "description", description = "A seller-defined description of the payment business policy. This description is only for the seller's use, and is not exposed on any eBay pages. This field is returned if set for the policy. <br/><br/><b>Max length</b>: 250", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("description")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public SetPaymentPolicyResponse fullPaymentDueIn(TimeDuration fullPaymentDueIn) {
+    this.fullPaymentDueIn = fullPaymentDueIn;
+    return this;
+  }
+
+  /**
+   * Get fullPaymentDueIn
+   * @return fullPaymentDueIn
+  */
+  @Valid 
+  @Schema(name = "fullPaymentDueIn", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("fullPaymentDueIn")
+  public TimeDuration getFullPaymentDueIn() {
+    return fullPaymentDueIn;
+  }
+
+  public void setFullPaymentDueIn(TimeDuration fullPaymentDueIn) {
+    this.fullPaymentDueIn = fullPaymentDueIn;
+  }
+
+  public SetPaymentPolicyResponse immediatePay(Boolean immediatePay) {
+    this.immediatePay = immediatePay;
+    return this;
+  }
+
+  /**
+   * The value returned in this field will reflect the value set by the seller in the <b>immediatePay</b> request field. A value of <code>true</code> indicates that immediate payment is required from the buyer for: <ul><li>A fixed-price item</li><li>An auction item where the buyer is using the 'Buy it Now' option</li><li>A deposit for a motor vehicle listing</li></ul><br />It is possible for the seller to set this field as <code>true</code> in the payment business policy, but it will not apply in some scenarios. For example, immediate payment is not applicable for auction listings that have a winning bidder, for buyer purchases that involve the Best Offer feature, or for transactions that happen offline between the buyer and seller.
+   * @return immediatePay
+  */
+  
+  @Schema(name = "immediatePay", description = "The value returned in this field will reflect the value set by the seller in the <b>immediatePay</b> request field. A value of <code>true</code> indicates that immediate payment is required from the buyer for: <ul><li>A fixed-price item</li><li>An auction item where the buyer is using the 'Buy it Now' option</li><li>A deposit for a motor vehicle listing</li></ul><br />It is possible for the seller to set this field as <code>true</code> in the payment business policy, but it will not apply in some scenarios. For example, immediate payment is not applicable for auction listings that have a winning bidder, for buyer purchases that involve the Best Offer feature, or for transactions that happen offline between the buyer and seller.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("immediatePay")
+  public Boolean getImmediatePay() {
+    return immediatePay;
+  }
+
+  public void setImmediatePay(Boolean immediatePay) {
+    this.immediatePay = immediatePay;
+  }
+
+  public SetPaymentPolicyResponse marketplaceId(String marketplaceId) {
+    this.marketplaceId = marketplaceId;
+    return this;
+  }
+
+  /**
+   * The ID of the eBay marketplace to which this payment business policy applies. For implementation help, refer to <a href='https://developer.ebay.com/api-docs/sell/account/types/ba:MarketplaceIdEnum'>eBay API documentation</a>
+   * @return marketplaceId
+  */
+  
+  @Schema(name = "marketplaceId", description = "The ID of the eBay marketplace to which this payment business policy applies. For implementation help, refer to <a href='https://developer.ebay.com/api-docs/sell/account/types/ba:MarketplaceIdEnum'>eBay API documentation</a>", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("marketplaceId")
+  public String getMarketplaceId() {
+    return marketplaceId;
+  }
+
+  public void setMarketplaceId(String marketplaceId) {
+    this.marketplaceId = marketplaceId;
+  }
+
+  public SetPaymentPolicyResponse name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * A seller-defined name for this payment business policy. Names must be unique for policies assigned to the same marketplace.<br /><br /><b>Max length:</b> 64
+   * @return name
+  */
+  
+  @Schema(name = "name", description = "A seller-defined name for this payment business policy. Names must be unique for policies assigned to the same marketplace.<br /><br /><b>Max length:</b> 64", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("name")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public SetPaymentPolicyResponse paymentInstructions(String paymentInstructions) {
+    this.paymentInstructions = paymentInstructions;
+    return this;
+  }
+
+  /**
+   * <p class=\"tablenote\"><b>Note:</b> NO LONGER SUPPORTED. Although this field may be returned for some older payment business policies, payment instructions are no longer supported by payment business policies. If this field is returned, it can be ignored and these payment instructions will not appear in any listings that use the corresponding business policy.</p>A free-form string field that allows sellers to add detailed payment instructions to their listings.
+   * @return paymentInstructions
+  */
+  
+  @Schema(name = "paymentInstructions", description = "<p class=\"tablenote\"><b>Note:</b> NO LONGER SUPPORTED. Although this field may be returned for some older payment business policies, payment instructions are no longer supported by payment business policies. If this field is returned, it can be ignored and these payment instructions will not appear in any listings that use the corresponding business policy.</p>A free-form string field that allows sellers to add detailed payment instructions to their listings.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("paymentInstructions")
+  public String getPaymentInstructions() {
+    return paymentInstructions;
+  }
+
+  public void setPaymentInstructions(String paymentInstructions) {
+    this.paymentInstructions = paymentInstructions;
+  }
+
+  public SetPaymentPolicyResponse paymentMethods(List<@Valid PaymentMethod> paymentMethods) {
+    this.paymentMethods = paymentMethods;
+    return this;
+  }
+
+  public SetPaymentPolicyResponse addPaymentMethodsItem(PaymentMethod paymentMethodsItem) {
+    if (this.paymentMethods == null) {
+      this.paymentMethods = new ArrayList<>();
+    }
+    this.paymentMethods.add(paymentMethodsItem);
+    return this;
+  }
+
+  /**
+   * This array shows the available payment methods that the seller has set for the payment business policy.<br /><br />Sellers do not have to specify any electronic payment methods for listings, so this array will often be returned empty unless the payment business policy is intended for motor vehicle listings or other items in categories where offline payments are required or supported.
+   * @return paymentMethods
+  */
+  @Valid 
+  @Schema(name = "paymentMethods", description = "This array shows the available payment methods that the seller has set for the payment business policy.<br /><br />Sellers do not have to specify any electronic payment methods for listings, so this array will often be returned empty unless the payment business policy is intended for motor vehicle listings or other items in categories where offline payments are required or supported.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("paymentMethods")
+  public List<@Valid PaymentMethod> getPaymentMethods() {
+    return paymentMethods;
+  }
+
+  public void setPaymentMethods(List<@Valid PaymentMethod> paymentMethods) {
+    this.paymentMethods = paymentMethods;
+  }
+
+  public SetPaymentPolicyResponse paymentPolicyId(String paymentPolicyId) {
+    this.paymentPolicyId = paymentPolicyId;
+    return this;
+  }
+
+  /**
+   * A unique eBay-assigned ID for a payment business policy. This ID is generated when the policy is created.
+   * @return paymentPolicyId
+  */
+  
+  @Schema(name = "paymentPolicyId", description = "A unique eBay-assigned ID for a payment business policy. This ID is generated when the policy is created.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("paymentPolicyId")
+  public String getPaymentPolicyId() {
+    return paymentPolicyId;
+  }
+
+  public void setPaymentPolicyId(String paymentPolicyId) {
+    this.paymentPolicyId = paymentPolicyId;
+  }
+
+  public SetPaymentPolicyResponse warnings(List<@Valid Error> warnings) {
+    this.warnings = warnings;
+    return this;
+  }
+
+  public SetPaymentPolicyResponse addWarningsItem(Error warningsItem) {
+    if (this.warnings == null) {
+      this.warnings = new ArrayList<>();
+    }
+    this.warnings.add(warningsItem);
+    return this;
+  }
+
+  /**
+   * An array of one or more errors or warnings that were generated during the processing of the request. If there were no issues with the request, this array will return empty.
+   * @return warnings
+  */
+  @Valid 
+  @Schema(name = "warnings", description = "An array of one or more errors or warnings that were generated during the processing of the request. If there were no issues with the request, this array will return empty.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("warnings")
+  public List<@Valid Error> getWarnings() {
+    return warnings;
+  }
+
+  public void setWarnings(List<@Valid Error> warnings) {
+    this.warnings = warnings;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    SetPaymentPolicyResponse setPaymentPolicyResponse = (SetPaymentPolicyResponse) o;
+    return Objects.equals(this.categoryTypes, setPaymentPolicyResponse.categoryTypes) &&
+        Objects.equals(this.deposit, setPaymentPolicyResponse.deposit) &&
+        Objects.equals(this.description, setPaymentPolicyResponse.description) &&
+        Objects.equals(this.fullPaymentDueIn, setPaymentPolicyResponse.fullPaymentDueIn) &&
+        Objects.equals(this.immediatePay, setPaymentPolicyResponse.immediatePay) &&
+        Objects.equals(this.marketplaceId, setPaymentPolicyResponse.marketplaceId) &&
+        Objects.equals(this.name, setPaymentPolicyResponse.name) &&
+        Objects.equals(this.paymentInstructions, setPaymentPolicyResponse.paymentInstructions) &&
+        Objects.equals(this.paymentMethods, setPaymentPolicyResponse.paymentMethods) &&
+        Objects.equals(this.paymentPolicyId, setPaymentPolicyResponse.paymentPolicyId) &&
+        Objects.equals(this.warnings, setPaymentPolicyResponse.warnings);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(categoryTypes, deposit, description, fullPaymentDueIn, immediatePay, marketplaceId, name, paymentInstructions, paymentMethods, paymentPolicyId, warnings);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class SetPaymentPolicyResponse {\n");
+    sb.append("    categoryTypes: ").append(toIndentedString(categoryTypes)).append("\n");
+    sb.append("    deposit: ").append(toIndentedString(deposit)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    fullPaymentDueIn: ").append(toIndentedString(fullPaymentDueIn)).append("\n");
+    sb.append("    immediatePay: ").append(toIndentedString(immediatePay)).append("\n");
+    sb.append("    marketplaceId: ").append(toIndentedString(marketplaceId)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    paymentInstructions: ").append(toIndentedString(paymentInstructions)).append("\n");
+    sb.append("    paymentMethods: ").append(toIndentedString(paymentMethods)).append("\n");
+    sb.append("    paymentPolicyId: ").append(toIndentedString(paymentPolicyId)).append("\n");
+    sb.append("    warnings: ").append(toIndentedString(warnings)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

@@ -1,0 +1,33 @@
+/**
+ * The DatasetController file is a very simple one, which does not need to be changed manually,
+ * unless there's a case where business logic routes the request to an entity which is not
+ * the service.
+ * The heavy lifting of the Controller item is done in Request.js - that is where request
+ * parameters are extracted and sent to the service, and where response is handled.
+ */
+
+const Controller = require('./Controller');
+const service = require('../services/DatasetService');
+const get_dataset = async (request, response) => {
+  await Controller.handleRequest(request, response, service.get_dataset);
+};
+
+const get_dataset_events = async (request, response) => {
+  await Controller.handleRequest(request, response, service.get_dataset_events);
+};
+
+const get_datasets = async (request, response) => {
+  await Controller.handleRequest(request, response, service.get_datasets);
+};
+
+const get_upstream_dataset_events = async (request, response) => {
+  await Controller.handleRequest(request, response, service.get_upstream_dataset_events);
+};
+
+
+module.exports = {
+  get_dataset,
+  get_dataset_events,
+  get_datasets,
+  get_upstream_dataset_events,
+};

@@ -1,0 +1,168 @@
+package org.openapitools.model;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import java.time.OffsetDateTime;
+import java.util.Map;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * GetMFADeviceResponse
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-01-06T13:42:43.476388-04:00[America/Lower_Princes]")
+public class GetMFADeviceResponse {
+
+  private String userName;
+
+  private String serialNumber;
+
+  private OffsetDateTime enableDate;
+
+  private Map certifications;
+
+  public GetMFADeviceResponse() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public GetMFADeviceResponse(String serialNumber) {
+    this.serialNumber = serialNumber;
+  }
+
+  public GetMFADeviceResponse userName(String userName) {
+    this.userName = userName;
+    return this;
+  }
+
+  /**
+   * Get userName
+   * @return userName
+  */
+  
+  @Schema(name = "UserName", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("UserName")
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public GetMFADeviceResponse serialNumber(String serialNumber) {
+    this.serialNumber = serialNumber;
+    return this;
+  }
+
+  /**
+   * Get serialNumber
+   * @return serialNumber
+  */
+  @NotNull 
+  @Schema(name = "SerialNumber", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("SerialNumber")
+  public String getSerialNumber() {
+    return serialNumber;
+  }
+
+  public void setSerialNumber(String serialNumber) {
+    this.serialNumber = serialNumber;
+  }
+
+  public GetMFADeviceResponse enableDate(OffsetDateTime enableDate) {
+    this.enableDate = enableDate;
+    return this;
+  }
+
+  /**
+   * Get enableDate
+   * @return enableDate
+  */
+  @Valid 
+  @Schema(name = "EnableDate", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("EnableDate")
+  public OffsetDateTime getEnableDate() {
+    return enableDate;
+  }
+
+  public void setEnableDate(OffsetDateTime enableDate) {
+    this.enableDate = enableDate;
+  }
+
+  public GetMFADeviceResponse certifications(Map certifications) {
+    this.certifications = certifications;
+    return this;
+  }
+
+  /**
+   * Get certifications
+   * @return certifications
+  */
+  @Valid 
+  @Schema(name = "Certifications", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("Certifications")
+  public Map getCertifications() {
+    return certifications;
+  }
+
+  public void setCertifications(Map certifications) {
+    this.certifications = certifications;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    GetMFADeviceResponse getMFADeviceResponse = (GetMFADeviceResponse) o;
+    return Objects.equals(this.userName, getMFADeviceResponse.userName) &&
+        Objects.equals(this.serialNumber, getMFADeviceResponse.serialNumber) &&
+        Objects.equals(this.enableDate, getMFADeviceResponse.enableDate) &&
+        Objects.equals(this.certifications, getMFADeviceResponse.certifications);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(userName, serialNumber, enableDate, certifications);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class GetMFADeviceResponse {\n");
+    sb.append("    userName: ").append(toIndentedString(userName)).append("\n");
+    sb.append("    serialNumber: ").append(toIndentedString(serialNumber)).append("\n");
+    sb.append("    enableDate: ").append(toIndentedString(enableDate)).append("\n");
+    sb.append("    certifications: ").append(toIndentedString(certifications)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

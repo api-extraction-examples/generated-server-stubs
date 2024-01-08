@@ -1,0 +1,17 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/org/openapitools/OpenApiGeneratorApplication.java
+src/main/java/org/openapitools/RFC3339DateFormat.java
+src/main/java/org/openapitools/api/ApiUtil.java
+src/main/java/org/openapitools/api/SectionFormatApi.java
+src/main/java/org/openapitools/api/SectionFormatApiController.java
+src/main/java/org/openapitools/configuration/HomeController.java
+src/main/java/org/openapitools/configuration/SpringDocConfiguration.java
+src/main/java/org/openapitools/model/Article.java
+src/main/java/org/openapitools/model/ArticleMultimediaInner.java
+src/main/java/org/openapitools/model/ArticleRelatedUrlsInner.java
+src/main/java/org/openapitools/model/SectionFormatGet200Response.java
+src/main/resources/application.properties
+src/main/resources/openapi.yaml
+src/test/java/org/openapitools/OpenApiGeneratorApplicationTests.java

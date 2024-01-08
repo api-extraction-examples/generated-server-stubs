@@ -1,0 +1,993 @@
+/*
+ * Probely Developers
+ *
+ * Probely is a Web Vulnerability Scanning suite for Agile Teams. It provides continuous scanning of your Web Applications and lets you efficiently manage the lifecycle of the vulnerabilities found, in a sleek and intuitive ~~web interface~~ API.  ## Quick-Start  ### Authentication  To use the API, you first need to create a token (API Key). To create a token, select a target from the drop-down list, go to the \"Settings\" page, and click on the \"Integrations\" tab.  Write a name for the API Key. For example, if you want to use the API Key for travis, you could name it \"travis\". In this example, we chose \"**example.com_key**\"  ![Creating API key][1]    [1]: assets/qs/create_api_key_1.png    The API key was created successfully:  ![API key created][2]    [2]: assets/qs/create_api_key_2.png   On every request, you need to pass this token in the authorization header, like this:   ```yaml Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJBRlNJQlp 3elFsMDEiLCJ1c2VybmFtZSI6IkNIZ2tkSUROdzV0NSJ9.90UwiPGS2hlvgOLktFU0LfKuatNKm mEP79u17VnqT9M ```   **WARNING: Treat this token as a password. With this token, you have the power to fully manage the target.**  In the following examples, the token will be named as *PROBELY_AUTH_TOKEN*.   ### Scan target  First let's view our target list:  ```bash curl https://api.probely.com/targets/ \\   -X GET \\   -H \"Content-Type: application/json\" \\   -H \"Authorization: JWT PROBELY_AUTH_TOKEN\" ```   From the results, we need the **target id**:  ```json {    \"count\":1,    \"page_total\":1,    \"page\":1,    \"length\":10,    \"results\":[       {          \"id\":\"AxtkqTE0v3E-\",          \"name\":\"test-site\",          \"desc\":\"\",          \"url\":\"https://test-site.example.com\",          \"settings\":             \"(...)\"          ,          \"stack\":             \"(...)\"          ,          \"verified\":true,          \"(...)\": \"(...)\"       }    ] } ```   Now we can send a request to start a scan on target id **AxtkqTE0v3E-**  ```bash curl https://api.probely.com/targets/AxtkqTE0v3E-/scan_now/ \\   -X POST \\   -H \"Content-Type: application/json\" \\   -H \"Authorization: JWT PROBELY_AUTH_TOKEN\" ```   And we get a response saying that the scan is scheduled: the status is **queued**, and we've got a **scan id**:  ```json {    \"changed\":\"2017-08-01T13:37:00.843339Z\",    \"started\":null,    \"completed\":null,    \"mediums\":0,    \"changed_by\":     \"(...)\"    ,    \"highs\":0,    \"status\":\"queued\",    \"id\":\"S6dOMPn0SnoH\",    \"created_by\":     \"(...)\"    ,    \"target\":     \"(...)\"    ,    \"created\":\"2017-08-01T13:37:00.843339Z\",    \"lows\":0 } ```   Using the scan id **S6dOMPn0SnoH**, we can pool the scan status:  ```bash curl https://api.probely.com/targets/AxtkqTE0v3E-/scans/S6dOMPn0SnoH/ \\   -X GET \\   -H \"Content-Type: application/json\" \\   -H \"Authorization: JWT PROBELY_AUTH_TOKEN\" ```   And we get a response saying that the scan status is now **started**:  ```json {    \"id\":\"S6dOMPn0SnoH\",    \"changed\":\"2017-08-01T13:38:12.623650Z\",    \"started\":null,    \"completed\":null,    \"mediums\":0,    \"changed_by\":     \"(...)\"    ,    \"highs\":0,    \"status\":\"started\",    \"created_by\":     \"(...)\"    ,    \"target\":     \"(...)\"    ,    \"created\":\"2017-08-01T13:37:00.843339Z\",    \"lows\":0 } ```   The possible statuses are:  | Status | Name | Description | | ------ | ---- | ----------- | | queued | Queued | The scan is queued to start | | started | Started | The scan is currently running | | under_review | Under Review | The scan is complete but has some findings under review | | completed | Completed | The scan is complete | | completed_with_errors | Completed with errors | The scan is complete even after getting some error(s) | | failed | Failed | The scan failed | | canceled | Canceled | The scan was canceled | | canceling | Canceling | The scan is being canceled |   During the scan, the keys \"lows\", \"mediums\", and \"highs\" will be updated with the findings, as they are being found.  After we get either the status **completed** or **completed_with_errors**, we can view the findings.   ### Get vulnerabilities  Using the previous scan id **S6dOMPn0SnoH**, we can get the scan results:  ```bash curl https://api.probely.com/targets/AxtkqTE0v3E-/scans/S6dOMPn0SnoH/ \\   -X GET \\   -H \"Content-Type: application/json\" \\   -H \"Authorization: JWT PROBELY_AUTH_TOKEN\" ```  We get a response saying that the scan status is now **completed**, and that **45** vulnerabilities were found. **14** low, **11** medium and **20** high:  ```json {    \"id\":\"S6dOMPn0SnoH\",    \"target\":     \"(...)\"    ,    \"status\":\"completed\",    \"started\":\"2017-08-01T13:37:12.623650Z\",    \"completed\":\"2017-08-01T14:17:48.559514Z\",    \"lows\":14,    \"mediums\":11,    \"highs\":20,    \"created\":\"2017-08-01T13:37:00.843339Z\",    \"created_by\":     \"(...)\"    ,    \"changed\":\"2017-08-01T14:17:48.559514Z\",    \"changed_by\":     \"(...)\" } ```  You can now view the results of this scan, or the target findings.   Let's start with the scan results:  ```bash curl https://api.probely.com/targets/AxtkqTE0v3E-/findings/?scan=S6dOMPn0SnoH&page=1 \\   -X GET \\   -H \"Content-Type: application/json\" \\   -H \"Authorization: JWT PROBELY_AUTH_TOKEN\" ```  ```json {    \"count\":45,    \"page_total\":5,    \"page\":1,    \"length\":10,    \"results\":[       {          \"id\":79,          \"target\":           \"(...)\"          ,          \"scans\":           \"(...)\"          ,          \"labels\":           \"(...)\"          ,          \"fix\":\"To fix an SQL Injection in PHP, you should use Prepared Statements. Prepared Statements can be thought of as a kind of compiled template for the SQL that an application wants to run, that can be customized using variable parameters.\\n\\nPHP's PDO extension supports Prepared Statements, so that's probably your best option.\\n\\nIn the example below you can see the use of prepared statements. Variables ```$username``` and ```$hashedPassword``` come from user input.\\n\\n```\\n$stmt = $dbg->prepare(\\\"SELECT id, name FROM users\\n                       WHERE username=? AND password=?\\\");\\n$stmt->bindParam(1, $username);\\n$stmt->bindParam(2, $hashedPassword);\\nif ($stmt->execute()) {\\n\\t$user = $stmt->fetch();\\n\\tif ($user) {\\n\\t\\t$_SESSION['authID'] = $user['id'];\\n\\t\\techo \\\"Hello \\\" . $user['name'];\\n\\t} else {\\n\\t\\techo \\\"Invalid Login\\\";\\n\\t}\\n}\\n```  \\n\\nAs an added bonus, if you're executing the same query several times, then it'll be even faster than when you're not using prepared statements. This is because when using prepared statements, the query needs to be parsed (prepared) only once, but can be executed multiple times with the same or different parameters. \\n\",          \"requests\":[             {                \"request\":\"(...)\",                \"response\":\"(...)\"             },             {                \"request\":\"(...)\",                \"response\":\"(...)\"             }          ],          \"evidence\":null,          \"extra\":\"\",          \"definition\":{             \"id\":\"xnV8PJVmSoLS\",             \"name\":\"SQL Injection\",             \"desc\":\"SQL Injections are the most common form of injections because SQL databases are very popular in dynamic web applications. This vulnerability allows an attacker to tamper existing SQL queries performed by the web application. Depending on the queries, the attacker might be able to access, modify or even destroy data from the database.\\n\\nSince databases are commonly used to store private data, such as authentication information, personal user data and site content, if an attacker gains access to it, the consequences are typically very severe, ranging from defacement of the web application to users data leakage or loss, or even full control of the web application or database server.\",          },          \"url\":\"http://test-site.example.com/login.php\",          \"path\":\"login.php\",          \"method\":\"post\",          \"parameter\":\"username\",          \"value\":\"\",          \"params\":{             \"username\":[                \"probely'\"             ],             \"password\":[                \"probely\"             ]          },          \"reporter\":           \"(...)\"          ,          \"assignee\":null,          \"state\":\"notfixed\",          \"severity\":30,          \"last_found\":\"2017-08-01T14:03:56.207794Z\",          \"changed\":\"2017-08-01T14:03:56.207794Z\",          \"changed_by\":           \"(...)\"          ,          \"comment\":\"\"       },       \"(...)\"    ] } ```  You can also view all the target findings, which will show all the findings that are not yet fixed. \\\\ The structure is similar to the previous result.  ```bash curl https://api.probely.com/targets/AxtkqTE0v3E-/findings/ \\   -X GET \\   -H \"Content-Type: application/json\" \\   -H \"Authorization: JWT PROBELY_AUTH_TOKEN\" ```   ### Get vulnerability details  You can also get details for a particular finding in a target. \\\\ In this example we will get the details for the same finding as in the previous section:  ```bash curl https://api.probely.com/targets/AxtkqTE0v3E-/findings/79/ \\   -X GET \\   -H \"Content-Type: application/json\" \\   -H \"Authorization: JWT PROBELY_AUTH_TOKEN\" ```   This will result on the same information, but just for this particular finding:  ```json {    \"id\":79,    \"target\":     \"(...)\"    ,    \"scans\":     \"(...)\"    ,    \"labels\":     \"(...)\"    ,    \"fix\":\"To fix an SQL Injection in PHP, you should use Prepared Statements. Prepared Statements can be thought of as a kind of compiled template for the SQL that an application wants to run, that can be customized using variable parameters.\\n\\nPHP's PDO extension supports Prepared Statements, so that's probably your best option.\\n\\nIn the example below you can see the use of prepared statements. Variables ```$username``` and ```$hashedPassword``` come from user input.\\n\\n```\\n$stmt = $dbg->prepare(\\\"SELECT id, name FROM users\\n                       WHERE username=? AND password=?\\\");\\n$stmt->bindParam(1, $username);\\n$stmt->bindParam(2, $hashedPassword);\\nif ($stmt->execute()) {\\n\\t$user = $stmt->fetch();\\n\\tif ($user) {\\n\\t\\t$_SESSION['authID'] = $user['id'];\\n\\t\\techo \\\"Hello \\\" . $user['name'];\\n\\t} else {\\n\\t\\techo \\\"Invalid Login\\\";\\n\\t}\\n}\\n```  \\n\\nAs an added bonus, if you're executing the same query several times, then it'll be even faster than when you're not using prepared statements. This is because when using prepared statements, the query needs to be parsed (prepared) only once, but can be executed multiple times with the same or different parameters. \\n\",    \"requests\":[       {          \"request\":\"(...)\",          \"response\":\"(...)\"       },       {          \"request\":\"(...)\",          \"response\":\"(...)\"       }    ],    \"evidence\":null,    \"extra\":\"\",    \"definition\":{       \"id\":\"xnV8PJVmSoLS\",       \"name\":\"SQL Injection\",       \"desc\":\"SQL Injections are the most common form of injections because SQL databases are very popular in dynamic web applications. This vulnerability allows an attacker to tamper existing SQL queries performed by the web application. Depending on the queries, the attacker might be able to access, modify or even destroy data from the database.\\n\\nSince databases are commonly used to store private data, such as authentication information, personal user data and site content, if an attacker gains access to it, the consequences are typically very severe, ranging from defacement of the web application to users data leakage or loss, or even full control of the web application or database server.\",    },    \"url\":\"http://test-site.example.com/login.php\",    \"path\":\"login.php\",    \"method\":\"post\",    \"parameter\":\"username\",    \"value\":\"\",    \"params\":{       \"username\":[          \"probely'\"       ],       \"password\":[          \"probely\"       ]    },    \"reporter\":     \"(...)\"    ,    \"assignee\":null,    \"state\":\"notfixed\",    \"severity\":30,    \"last_found\":\"2017-08-01T14:03:56.207794Z\",    \"changed\":\"2017-08-01T14:03:56.207794Z\",    \"changed_by\":     \"(...)\"    ,    \"comment\":\"\" } ```  ## Concepts  The short version is that you run *scans* on *targets*, and *findings* are created for any issue that is found. However, there are a few more concepts that must be explained in order to get a complete picture of how Probely works. We will spend the next few sections detailing the most important concepts.   ### Target  A *target* defines the scope of a scan, what will and won't be included in the scan plan. This is done by filling a *target*'s *site* and *assets*.  The entry point for the web application (and authentication) is setup in the *target*'s *site*.  In modern web applications, you are probably loading resources from multiple domains. A single page app, for example, will usualy load the page from one domain and make AJAX requests to another. This is what *assets* are for: they specify what domains our scanner should follow and create requests for.   ### Site A URL is probably not the only thing you will need to setup when scannning your application. Does the application have an authenticated area? Does it use basic auth? Does it expect a certain cookie or header? These parameters are all configured in the *target*'s *site*.   We need to ensure that only allowed web applications are scanned. Therefore, we must verify that you have control of any site you wish to include. This can be done by:   * Placing a file on a well-known location, on the site's server;   * Creating specific DNS records.   ### Asset  An *asset* is very similar to a *site*. The difference is that it is a domain instead of a URL. Additionally, an *asset* has no login or basic auth support. You can still have custom cookies and headers per *asset*.  As with the *site*, you will need to prove an *asset*'s ownership. We have added some rules to make your life easier, if you already have verified a *site* and the domains match, the validation is fast-tracked.  ### Scans  This is what you're here for. After configuring your *target*, you will want to run *scans* against it. You can either start a one off scan, or schedule one for later - recurring or not.  During the *scan*, we will spider and run several modules to check for security issues, which we call *findings*. You can check the *findings* even before a scan ends. If everything goes well, the scan will complete and that is it.  With some *findings*, our automated processes may have difficulties determining if it is a false positive or a legitimate issue. In these instances, a scan will be marked as under review, and we will further analyze the finding before making a decision. We will only show findings that, for some degree of confidence, are true positives. A finding that we are not sure of will never be displayed.  As much as we try to prevent it, a *scan* (or a sub-module) can malfunction. If this happens, a *scan* is marked as:   * \"failed\": the problem was irrecoverable;   * \"completed with errors\": some module failed but the scan itself completed.  During a scan, we try to determine what *frameworks* you are using and add this information to the *site* and *asset* objects discussed previously.   ### Findings  The last core concept is the *finding*, this is a security issue that we have found during our scans. If the same issue is found in a new scan it will not open a new finding but update the previous.  A *finding* will have a lot of information about the issue. Namely, where it was found, URL, insertion point (e.g. cookie), parameter, and method. Evidence we gathered, and the full request and response that we used. Sugestions of how to go about fixing it. A full description of the vulnerability is also present in the *definition* property. We also assign a severity and calculate the CVSS score for each.  Besides all this, there are also actions that you can perform on a *finding*. You can assign it to one user, leave comments for your team or add labels, and reduce or increase the severity.  If you don't plan on fixing the *finding* and accept the risk, or you think we reported a false positive, you can mark the finding to reflect that. 
+ *
+ * API version: 1.2.0
+ * Contact: support@probely.com
+ * Generated by: OpenAPI Generator (https://openapi-generator.tech)
+ */
+
+package openapi
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// Route is the information for every URI.
+type Route struct {
+	// Name is the name of this Route.
+	Name		string
+	// Method is the string for the HTTP method. ex) GET, POST etc..
+	Method		string
+	// Pattern is the pattern of the URI.
+	Pattern	 	string
+	// HandlerFunc is the handler function of this route.
+	HandlerFunc	gin.HandlerFunc
+}
+
+// NewRouter returns a new router.
+func NewRouter(handleFunctions ApiHandleFunctions) *gin.Engine {
+	router := gin.Default()
+	for _, route := range getRoutes(handleFunctions) {
+		if route.HandlerFunc == nil {
+			route.HandlerFunc = DefaultHandleFunc
+		}
+		switch route.Method {
+		case http.MethodGet:
+			router.GET(route.Pattern, route.HandlerFunc)
+		case http.MethodPost:
+			router.POST(route.Pattern, route.HandlerFunc)
+		case http.MethodPut:
+			router.PUT(route.Pattern, route.HandlerFunc)
+		case http.MethodPatch:
+			router.PATCH(route.Pattern, route.HandlerFunc)
+		case http.MethodDelete:
+			router.DELETE(route.Pattern, route.HandlerFunc)
+		}
+	}
+
+	return router
+}
+
+// Default handler for not yet implemented routes
+func DefaultHandleFunc(c *gin.Context) {
+	c.String(http.StatusNotImplemented, "501 not implemented")
+}
+
+type ApiHandleFunctions struct {
+
+	// Routes for the APIKeysAPI part of the API
+	APIKeysAPI APIKeysAPI
+	// Routes for the AccountAPI part of the API
+	AccountAPI AccountAPI
+	// Routes for the ArchiveAPI part of the API
+	ArchiveAPI ArchiveAPI
+	// Routes for the AssetsAPI part of the API
+	AssetsAPI AssetsAPI
+	// Routes for the EventsAPI part of the API
+	EventsAPI EventsAPI
+	// Routes for the FindingsAPI part of the API
+	FindingsAPI FindingsAPI
+	// Routes for the FrameworksAPI part of the API
+	FrameworksAPI FrameworksAPI
+	// Routes for the IntegrationsAPI part of the API
+	IntegrationsAPI IntegrationsAPI
+	// Routes for the JiraCloudIntegrationAPI part of the API
+	JiraCloudIntegrationAPI JiraCloudIntegrationAPI
+	// Routes for the JiraServerIntegrationAPI part of the API
+	JiraServerIntegrationAPI JiraServerIntegrationAPI
+	// Routes for the LabelsAPI part of the API
+	LabelsAPI LabelsAPI
+	// Routes for the LoginAPI part of the API
+	LoginAPI LoginAPI
+	// Routes for the PasswordResetAPI part of the API
+	PasswordResetAPI PasswordResetAPI
+	// Routes for the PlanAPI part of the API
+	PlanAPI PlanAPI
+	// Routes for the ScansAPI part of the API
+	ScansAPI ScansAPI
+	// Routes for the ScheduledAPI part of the API
+	ScheduledAPI ScheduledAPI
+	// Routes for the SiteAPI part of the API
+	SiteAPI SiteAPI
+	// Routes for the SlackIntegrationAPI part of the API
+	SlackIntegrationAPI SlackIntegrationAPI
+	// Routes for the StatisticsAPI part of the API
+	StatisticsAPI StatisticsAPI
+	// Routes for the TargetsAPI part of the API
+	TargetsAPI TargetsAPI
+	// Routes for the UsersAPI part of the API
+	UsersAPI UsersAPI
+	// Routes for the VulnerabilitiesAPI part of the API
+	VulnerabilitiesAPI VulnerabilitiesAPI
+}
+
+func getRoutes(handleFunctions ApiHandleFunctions) []Route {
+	return []Route{ 
+		{
+			"KeysGet",
+			http.MethodGet,
+			"/keys/",
+			handleFunctions.APIKeysAPI.KeysGet,
+		},
+		{
+			"KeysIdDelete",
+			http.MethodDelete,
+			"/keys/:id/",
+			handleFunctions.APIKeysAPI.KeysIdDelete,
+		},
+		{
+			"KeysIdGet",
+			http.MethodGet,
+			"/keys/:id/",
+			handleFunctions.APIKeysAPI.KeysIdGet,
+		},
+		{
+			"KeysPost",
+			http.MethodPost,
+			"/keys/",
+			handleFunctions.APIKeysAPI.KeysPost,
+		},
+		{
+			"TargetsTargetIdKeysGet",
+			http.MethodGet,
+			"/targets/:target_id/keys/",
+			handleFunctions.APIKeysAPI.TargetsTargetIdKeysGet,
+		},
+		{
+			"TargetsTargetIdKeysIdDelete",
+			http.MethodDelete,
+			"/targets/:target_id/keys/:id/",
+			handleFunctions.APIKeysAPI.TargetsTargetIdKeysIdDelete,
+		},
+		{
+			"TargetsTargetIdKeysIdGet",
+			http.MethodGet,
+			"/targets/:target_id/keys/:id/",
+			handleFunctions.APIKeysAPI.TargetsTargetIdKeysIdGet,
+		},
+		{
+			"TargetsTargetIdKeysPost",
+			http.MethodPost,
+			"/targets/:target_id/keys/",
+			handleFunctions.APIKeysAPI.TargetsTargetIdKeysPost,
+		},
+		{
+			"AccountGet",
+			http.MethodGet,
+			"/account/",
+			handleFunctions.AccountAPI.AccountGet,
+		},
+		{
+			"BillingActionsPost",
+			http.MethodPost,
+			"/billing/actions/",
+			handleFunctions.AccountAPI.BillingActionsPost,
+		},
+		{
+			"BillingEstimatePost",
+			http.MethodPost,
+			"/billing/estimate/",
+			handleFunctions.AccountAPI.BillingEstimatePost,
+		},
+		{
+			"BillingGet",
+			http.MethodGet,
+			"/billing/",
+			handleFunctions.AccountAPI.BillingGet,
+		},
+		{
+			"BillingPatch",
+			http.MethodPatch,
+			"/billing/",
+			handleFunctions.AccountAPI.BillingPatch,
+		},
+		{
+			"BillingPut",
+			http.MethodPut,
+			"/billing/",
+			handleFunctions.AccountAPI.BillingPut,
+		},
+		{
+			"BillingSubscribePost",
+			http.MethodPost,
+			"/billing/subscribe/",
+			handleFunctions.AccountAPI.BillingSubscribePost,
+		},
+		{
+			"TargetActionsPost",
+			http.MethodPost,
+			"/target-actions/",
+			handleFunctions.AccountAPI.TargetActionsPost,
+		},
+		{
+			"TargetsActivatePost",
+			http.MethodPost,
+			"/targets/activate/",
+			handleFunctions.ArchiveAPI.TargetsActivatePost,
+		},
+		{
+			"TargetsArchivePost",
+			http.MethodPost,
+			"/targets/archive/",
+			handleFunctions.ArchiveAPI.TargetsArchivePost,
+		},
+		{
+			"TargetsArchivedPost",
+			http.MethodPost,
+			"/targets/archived/",
+			handleFunctions.ArchiveAPI.TargetsArchivedPost,
+		},
+		{
+			"TargetsTargetIdAssetsGet",
+			http.MethodGet,
+			"/targets/:target_id/assets/",
+			handleFunctions.AssetsAPI.TargetsTargetIdAssetsGet,
+		},
+		{
+			"TargetsTargetIdAssetsIdDelete",
+			http.MethodDelete,
+			"/targets/:target_id/assets/:id/",
+			handleFunctions.AssetsAPI.TargetsTargetIdAssetsIdDelete,
+		},
+		{
+			"TargetsTargetIdAssetsIdGet",
+			http.MethodGet,
+			"/targets/:target_id/assets/:id/",
+			handleFunctions.AssetsAPI.TargetsTargetIdAssetsIdGet,
+		},
+		{
+			"TargetsTargetIdAssetsIdPatch",
+			http.MethodPatch,
+			"/targets/:target_id/assets/:id/",
+			handleFunctions.AssetsAPI.TargetsTargetIdAssetsIdPatch,
+		},
+		{
+			"TargetsTargetIdAssetsIdPut",
+			http.MethodPut,
+			"/targets/:target_id/assets/:id/",
+			handleFunctions.AssetsAPI.TargetsTargetIdAssetsIdPut,
+		},
+		{
+			"TargetsTargetIdAssetsIdVerifyPost",
+			http.MethodPost,
+			"/targets/:target_id/assets/:id/verify/",
+			handleFunctions.AssetsAPI.TargetsTargetIdAssetsIdVerifyPost,
+		},
+		{
+			"TargetsTargetIdAssetsPost",
+			http.MethodPost,
+			"/targets/:target_id/assets/",
+			handleFunctions.AssetsAPI.TargetsTargetIdAssetsPost,
+		},
+		{
+			"EventsGet",
+			http.MethodGet,
+			"/events/",
+			handleFunctions.EventsAPI.EventsGet,
+		},
+		{
+			"EventsIdGet",
+			http.MethodGet,
+			"/events/:id/",
+			handleFunctions.EventsAPI.EventsIdGet,
+		},
+		{
+			"TargetsTargetIdEventsGet",
+			http.MethodGet,
+			"/targets/:target_id/events/",
+			handleFunctions.EventsAPI.TargetsTargetIdEventsGet,
+		},
+		{
+			"TargetsTargetIdEventsIdGet",
+			http.MethodGet,
+			"/targets/:target_id/events/:id/",
+			handleFunctions.EventsAPI.TargetsTargetIdEventsIdGet,
+		},
+		{
+			"TargetsTargetIdWebhooksGet",
+			http.MethodGet,
+			"/targets/:target_id/webhooks/",
+			handleFunctions.EventsAPI.TargetsTargetIdWebhooksGet,
+		},
+		{
+			"TargetsTargetIdWebhooksIdDelete",
+			http.MethodDelete,
+			"/targets/:target_id/webhooks/:id/",
+			handleFunctions.EventsAPI.TargetsTargetIdWebhooksIdDelete,
+		},
+		{
+			"TargetsTargetIdWebhooksIdGet",
+			http.MethodGet,
+			"/targets/:target_id/webhooks/:id/",
+			handleFunctions.EventsAPI.TargetsTargetIdWebhooksIdGet,
+		},
+		{
+			"TargetsTargetIdWebhooksIdPatch",
+			http.MethodPatch,
+			"/targets/:target_id/webhooks/:id/",
+			handleFunctions.EventsAPI.TargetsTargetIdWebhooksIdPatch,
+		},
+		{
+			"TargetsTargetIdWebhooksIdPut",
+			http.MethodPut,
+			"/targets/:target_id/webhooks/:id/",
+			handleFunctions.EventsAPI.TargetsTargetIdWebhooksIdPut,
+		},
+		{
+			"TargetsTargetIdWebhooksPost",
+			http.MethodPost,
+			"/targets/:target_id/webhooks/",
+			handleFunctions.EventsAPI.TargetsTargetIdWebhooksPost,
+		},
+		{
+			"WebhooksGet",
+			http.MethodGet,
+			"/webhooks/",
+			handleFunctions.EventsAPI.WebhooksGet,
+		},
+		{
+			"WebhooksIdDelete",
+			http.MethodDelete,
+			"/webhooks/:id/",
+			handleFunctions.EventsAPI.WebhooksIdDelete,
+		},
+		{
+			"WebhooksIdGet",
+			http.MethodGet,
+			"/webhooks/:id/",
+			handleFunctions.EventsAPI.WebhooksIdGet,
+		},
+		{
+			"WebhooksIdPatch",
+			http.MethodPatch,
+			"/webhooks/:id/",
+			handleFunctions.EventsAPI.WebhooksIdPatch,
+		},
+		{
+			"WebhooksIdPut",
+			http.MethodPut,
+			"/webhooks/:id/",
+			handleFunctions.EventsAPI.WebhooksIdPut,
+		},
+		{
+			"WebhooksPost",
+			http.MethodPost,
+			"/webhooks/",
+			handleFunctions.EventsAPI.WebhooksPost,
+		},
+		{
+			"TargetsTargetIdFindingsBulkReportPost",
+			http.MethodPost,
+			"/targets/:target_id/findings/bulk/report/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsBulkReportPost,
+		},
+		{
+			"TargetsTargetIdFindingsBulkRetestPost",
+			http.MethodPost,
+			"/targets/:target_id/findings/bulk/retest/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsBulkRetestPost,
+		},
+		{
+			"TargetsTargetIdFindingsBulkUpdatePatch",
+			http.MethodPatch,
+			"/targets/:target_id/findings/bulk/update/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsBulkUpdatePatch,
+		},
+		{
+			"TargetsTargetIdFindingsGet",
+			http.MethodGet,
+			"/targets/:target_id/findings/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsGet,
+		},
+		{
+			"TargetsTargetIdFindingsIdGet",
+			http.MethodGet,
+			"/targets/:target_id/findings/:id/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsIdGet,
+		},
+		{
+			"TargetsTargetIdFindingsIdLogGet",
+			http.MethodGet,
+			"/targets/:target_id/findings/:id/log/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsIdLogGet,
+		},
+		{
+			"TargetsTargetIdFindingsIdPatch",
+			http.MethodPatch,
+			"/targets/:target_id/findings/:id/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsIdPatch,
+		},
+		{
+			"TargetsTargetIdFindingsIdPut",
+			http.MethodPut,
+			"/targets/:target_id/findings/:id/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsIdPut,
+		},
+		{
+			"TargetsTargetIdFindingsIdRetestPost",
+			http.MethodPost,
+			"/targets/:target_id/findings/:id/retest/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsIdRetestPost,
+		},
+		{
+			"TargetsTargetIdFindingsReportGet",
+			http.MethodGet,
+			"/targets/:target_id/findings/report/",
+			handleFunctions.FindingsAPI.TargetsTargetIdFindingsReportGet,
+		},
+		{
+			"FrameworksGet",
+			http.MethodGet,
+			"/frameworks/",
+			handleFunctions.FrameworksAPI.FrameworksGet,
+		},
+		{
+			"FrameworksIdGet",
+			http.MethodGet,
+			"/frameworks/:id/",
+			handleFunctions.FrameworksAPI.FrameworksIdGet,
+		},
+		{
+			"IntegrationsGet",
+			http.MethodGet,
+			"/integrations/",
+			handleFunctions.IntegrationsAPI.IntegrationsGet,
+		},
+		{
+			"TargetsTargetIdIntegrationsGet",
+			http.MethodGet,
+			"/targets/:target_id/integrations/",
+			handleFunctions.IntegrationsAPI.TargetsTargetIdIntegrationsGet,
+		},
+		{
+			"IntegrationsJiraCloudProjectsGet",
+			http.MethodGet,
+			"/integrations/jira-cloud/projects/",
+			handleFunctions.JiraCloudIntegrationAPI.IntegrationsJiraCloudProjectsGet,
+		},
+		{
+			"IntegrationsJiraCloudProjectsProjectIdIssueTypesGet",
+			http.MethodGet,
+			"/integrations/jira-cloud/projects/:project_id/issue_types/",
+			handleFunctions.JiraCloudIntegrationAPI.IntegrationsJiraCloudProjectsProjectIdIssueTypesGet,
+		},
+		{
+			"IntegrationsJiraCloudProjectsProjectIdIssueTypesIssueTypeIdPrioritiesGet",
+			http.MethodGet,
+			"/integrations/jira-cloud/projects/:project_id/issue_types/:issue_type_id/priorities/",
+			handleFunctions.JiraCloudIntegrationAPI.IntegrationsJiraCloudProjectsProjectIdIssueTypesIssueTypeIdPrioritiesGet,
+		},
+		{
+			"IntegrationsJiraCloudProjectsProjectIdIssueTypesIssueTypeIdStatusGet",
+			http.MethodGet,
+			"/integrations/jira-cloud/projects/:project_id/issue_types/:issue_type_id/status/",
+			handleFunctions.JiraCloudIntegrationAPI.IntegrationsJiraCloudProjectsProjectIdIssueTypesIssueTypeIdStatusGet,
+		},
+		{
+			"TargetsTargetIdFindingsIdIntegrationsJiraCloudGet",
+			http.MethodGet,
+			"/targets/:target_id/findings/:id/integrations/jira-cloud/",
+			handleFunctions.JiraCloudIntegrationAPI.TargetsTargetIdFindingsIdIntegrationsJiraCloudGet,
+		},
+		{
+			"TargetsTargetIdFindingsIdIntegrationsJiraCloudPatch",
+			http.MethodPatch,
+			"/targets/:target_id/findings/:id/integrations/jira-cloud/",
+			handleFunctions.JiraCloudIntegrationAPI.TargetsTargetIdFindingsIdIntegrationsJiraCloudPatch,
+		},
+		{
+			"TargetsTargetIdFindingsIdIntegrationsJiraCloudPut",
+			http.MethodPut,
+			"/targets/:target_id/findings/:id/integrations/jira-cloud/",
+			handleFunctions.JiraCloudIntegrationAPI.TargetsTargetIdFindingsIdIntegrationsJiraCloudPut,
+		},
+		{
+			"TargetsTargetIdIntegrationsJiraCloudGet",
+			http.MethodGet,
+			"/targets/:target_id/integrations/jira-cloud/",
+			handleFunctions.JiraCloudIntegrationAPI.TargetsTargetIdIntegrationsJiraCloudGet,
+		},
+		{
+			"TargetsTargetIdIntegrationsJiraCloudPatch",
+			http.MethodPatch,
+			"/targets/:target_id/integrations/jira-cloud/",
+			handleFunctions.JiraCloudIntegrationAPI.TargetsTargetIdIntegrationsJiraCloudPatch,
+		},
+		{
+			"TargetsTargetIdIntegrationsJiraCloudPut",
+			http.MethodPut,
+			"/targets/:target_id/integrations/jira-cloud/",
+			handleFunctions.JiraCloudIntegrationAPI.TargetsTargetIdIntegrationsJiraCloudPut,
+		},
+		{
+			"IntegrationsJiraServerProjectsGet",
+			http.MethodGet,
+			"/integrations/jira-server/projects/",
+			handleFunctions.JiraServerIntegrationAPI.IntegrationsJiraServerProjectsGet,
+		},
+		{
+			"IntegrationsJiraServerProjectsProjectIdIssueTypesGet",
+			http.MethodGet,
+			"/integrations/jira-server/projects/:project_id/issue_types/",
+			handleFunctions.JiraServerIntegrationAPI.IntegrationsJiraServerProjectsProjectIdIssueTypesGet,
+		},
+		{
+			"IntegrationsJiraServerProjectsProjectIdIssueTypesIssueTypeIdPrioritiesGet",
+			http.MethodGet,
+			"/integrations/jira-server/projects/:project_id/issue_types/:issue_type_id/priorities/",
+			handleFunctions.JiraServerIntegrationAPI.IntegrationsJiraServerProjectsProjectIdIssueTypesIssueTypeIdPrioritiesGet,
+		},
+		{
+			"IntegrationsJiraServerProjectsProjectIdIssueTypesIssueTypeIdStatusGet",
+			http.MethodGet,
+			"/integrations/jira-server/projects/:project_id/issue_types/:issue_type_id/status/",
+			handleFunctions.JiraServerIntegrationAPI.IntegrationsJiraServerProjectsProjectIdIssueTypesIssueTypeIdStatusGet,
+		},
+		{
+			"TargetsTargetIdFindingsIdIntegrationsJiraServerGet",
+			http.MethodGet,
+			"/targets/:target_id/findings/:id/integrations/jira-server/",
+			handleFunctions.JiraServerIntegrationAPI.TargetsTargetIdFindingsIdIntegrationsJiraServerGet,
+		},
+		{
+			"TargetsTargetIdFindingsIdIntegrationsJiraServerPatch",
+			http.MethodPatch,
+			"/targets/:target_id/findings/:id/integrations/jira-server/",
+			handleFunctions.JiraServerIntegrationAPI.TargetsTargetIdFindingsIdIntegrationsJiraServerPatch,
+		},
+		{
+			"TargetsTargetIdFindingsIdIntegrationsJiraServerPut",
+			http.MethodPut,
+			"/targets/:target_id/findings/:id/integrations/jira-server/",
+			handleFunctions.JiraServerIntegrationAPI.TargetsTargetIdFindingsIdIntegrationsJiraServerPut,
+		},
+		{
+			"TargetsTargetIdIntegrationsJiraServerGet",
+			http.MethodGet,
+			"/targets/:target_id/integrations/jira-server/",
+			handleFunctions.JiraServerIntegrationAPI.TargetsTargetIdIntegrationsJiraServerGet,
+		},
+		{
+			"TargetsTargetIdIntegrationsJiraServerPatch",
+			http.MethodPatch,
+			"/targets/:target_id/integrations/jira-server/",
+			handleFunctions.JiraServerIntegrationAPI.TargetsTargetIdIntegrationsJiraServerPatch,
+		},
+		{
+			"TargetsTargetIdIntegrationsJiraServerPut",
+			http.MethodPut,
+			"/targets/:target_id/integrations/jira-server/",
+			handleFunctions.JiraServerIntegrationAPI.TargetsTargetIdIntegrationsJiraServerPut,
+		},
+		{
+			"LabelsGet",
+			http.MethodGet,
+			"/labels/",
+			handleFunctions.LabelsAPI.LabelsGet,
+		},
+		{
+			"LabelsIdDelete",
+			http.MethodDelete,
+			"/labels/:id/",
+			handleFunctions.LabelsAPI.LabelsIdDelete,
+		},
+		{
+			"LabelsIdGet",
+			http.MethodGet,
+			"/labels/:id/",
+			handleFunctions.LabelsAPI.LabelsIdGet,
+		},
+		{
+			"LabelsIdPatch",
+			http.MethodPatch,
+			"/labels/:id/",
+			handleFunctions.LabelsAPI.LabelsIdPatch,
+		},
+		{
+			"LabelsIdPut",
+			http.MethodPut,
+			"/labels/:id/",
+			handleFunctions.LabelsAPI.LabelsIdPut,
+		},
+		{
+			"LabelsPost",
+			http.MethodPost,
+			"/labels/",
+			handleFunctions.LabelsAPI.LabelsPost,
+		},
+		{
+			"AuthObtainPost",
+			http.MethodPost,
+			"/auth/obtain/",
+			handleFunctions.LoginAPI.AuthObtainPost,
+		},
+		{
+			"AuthRefreshPost",
+			http.MethodPost,
+			"/auth/refresh/",
+			handleFunctions.LoginAPI.AuthRefreshPost,
+		},
+		{
+			"AuthRevokePost",
+			http.MethodPost,
+			"/auth/revoke/",
+			handleFunctions.LoginAPI.AuthRevokePost,
+		},
+		{
+			"AuthVerifyPost",
+			http.MethodPost,
+			"/auth/verify/",
+			handleFunctions.LoginAPI.AuthVerifyPost,
+		},
+		{
+			"EnterpriseAuthObtainPost",
+			http.MethodPost,
+			"/enterprise/auth/obtain/",
+			handleFunctions.LoginAPI.EnterpriseAuthObtainPost,
+		},
+		{
+			"EnterpriseAuthRefreshPost",
+			http.MethodPost,
+			"/enterprise/auth/refresh/",
+			handleFunctions.LoginAPI.EnterpriseAuthRefreshPost,
+		},
+		{
+			"EnterpriseAuthRevokePost",
+			http.MethodPost,
+			"/enterprise/auth/revoke/",
+			handleFunctions.LoginAPI.EnterpriseAuthRevokePost,
+		},
+		{
+			"EnterpriseAuthVerifyPost",
+			http.MethodPost,
+			"/enterprise/auth/verify/",
+			handleFunctions.LoginAPI.EnterpriseAuthVerifyPost,
+		},
+		{
+			"CheckPost",
+			http.MethodPost,
+			"/check/",
+			handleFunctions.PasswordResetAPI.CheckPost,
+		},
+		{
+			"ResetPost",
+			http.MethodPost,
+			"/reset/",
+			handleFunctions.PasswordResetAPI.ResetPost,
+		},
+		{
+			"SetpasswordPost",
+			http.MethodPost,
+			"/setpassword/",
+			handleFunctions.PasswordResetAPI.SetpasswordPost,
+		},
+		{
+			"PlansGet",
+			http.MethodGet,
+			"/plans/",
+			handleFunctions.PlanAPI.PlansGet,
+		},
+		{
+			"TargetsAllScansGet",
+			http.MethodGet,
+			"/targets/all/scans/",
+			handleFunctions.ScansAPI.TargetsAllScansGet,
+		},
+		{
+			"TargetsTargetIdScanNowPost",
+			http.MethodPost,
+			"/targets/:target_id/scan_now/",
+			handleFunctions.ScansAPI.TargetsTargetIdScanNowPost,
+		},
+		{
+			"TargetsTargetIdScansDatesGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/dates/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansDatesGet,
+		},
+		{
+			"TargetsTargetIdScansGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansGet,
+		},
+		{
+			"TargetsTargetIdScansIdCancelPost",
+			http.MethodPost,
+			"/targets/:target_id/scans/:id/cancel/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansIdCancelPost,
+		},
+		{
+			"TargetsTargetIdScansIdEndpointsGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/:id/endpoints/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansIdEndpointsGet,
+		},
+		{
+			"TargetsTargetIdScansIdGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/:id/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansIdGet,
+		},
+		{
+			"TargetsTargetIdScansIdReportDefaultGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/:id/report/default/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansIdReportDefaultGet,
+		},
+		{
+			"TargetsTargetIdScansIdReportGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/:id/report/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansIdReportGet,
+		},
+		{
+			"TargetsTargetIdScansIdReportOwaspGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/:id/report/owasp/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansIdReportOwaspGet,
+		},
+		{
+			"TargetsTargetIdScansIdReportPciGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/:id/report/pci/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansIdReportPciGet,
+		},
+		{
+			"TargetsTargetIdScansRetrievePageGet",
+			http.MethodGet,
+			"/targets/:target_id/scans/retrieve_page/",
+			handleFunctions.ScansAPI.TargetsTargetIdScansRetrievePageGet,
+		},
+		{
+			"TargetsAllScheduledscansExpandedGet",
+			http.MethodGet,
+			"/targets/all/scheduledscans/expanded/",
+			handleFunctions.ScheduledAPI.TargetsAllScheduledscansExpandedGet,
+		},
+		{
+			"TargetsTargetIdScheduledscansExpandedGet",
+			http.MethodGet,
+			"/targets/:target_id/scheduledscans/expanded/",
+			handleFunctions.ScheduledAPI.TargetsTargetIdScheduledscansExpandedGet,
+		},
+		{
+			"TargetsTargetIdScheduledscansGet",
+			http.MethodGet,
+			"/targets/:target_id/scheduledscans/",
+			handleFunctions.ScheduledAPI.TargetsTargetIdScheduledscansGet,
+		},
+		{
+			"TargetsTargetIdScheduledscansIdDelete",
+			http.MethodDelete,
+			"/targets/:target_id/scheduledscans/:id/",
+			handleFunctions.ScheduledAPI.TargetsTargetIdScheduledscansIdDelete,
+		},
+		{
+			"TargetsTargetIdScheduledscansIdGet",
+			http.MethodGet,
+			"/targets/:target_id/scheduledscans/:id/",
+			handleFunctions.ScheduledAPI.TargetsTargetIdScheduledscansIdGet,
+		},
+		{
+			"TargetsTargetIdScheduledscansIdPatch",
+			http.MethodPatch,
+			"/targets/:target_id/scheduledscans/:id/",
+			handleFunctions.ScheduledAPI.TargetsTargetIdScheduledscansIdPatch,
+		},
+		{
+			"TargetsTargetIdScheduledscansIdPut",
+			http.MethodPut,
+			"/targets/:target_id/scheduledscans/:id/",
+			handleFunctions.ScheduledAPI.TargetsTargetIdScheduledscansIdPut,
+		},
+		{
+			"TargetsTargetIdScheduledscansPost",
+			http.MethodPost,
+			"/targets/:target_id/scheduledscans/",
+			handleFunctions.ScheduledAPI.TargetsTargetIdScheduledscansPost,
+		},
+		{
+			"TargetsTargetIdSiteGet",
+			http.MethodGet,
+			"/targets/:target_id/site/",
+			handleFunctions.SiteAPI.TargetsTargetIdSiteGet,
+		},
+		{
+			"TargetsTargetIdSitePatch",
+			http.MethodPatch,
+			"/targets/:target_id/site/",
+			handleFunctions.SiteAPI.TargetsTargetIdSitePatch,
+		},
+		{
+			"TargetsTargetIdSitePut",
+			http.MethodPut,
+			"/targets/:target_id/site/",
+			handleFunctions.SiteAPI.TargetsTargetIdSitePut,
+		},
+		{
+			"TargetsTargetIdSiteVerifyPost",
+			http.MethodPost,
+			"/targets/:target_id/site/verify/",
+			handleFunctions.SiteAPI.TargetsTargetIdSiteVerifyPost,
+		},
+		{
+			"TargetsTargetIdIntegrationsSlackGet",
+			http.MethodGet,
+			"/targets/:target_id/integrations/slack/",
+			handleFunctions.SlackIntegrationAPI.TargetsTargetIdIntegrationsSlackGet,
+		},
+		{
+			"TargetsTargetIdIntegrationsSlackPatch",
+			http.MethodPatch,
+			"/targets/:target_id/integrations/slack/",
+			handleFunctions.SlackIntegrationAPI.TargetsTargetIdIntegrationsSlackPatch,
+		},
+		{
+			"TargetsTargetIdIntegrationsSlackPut",
+			http.MethodPut,
+			"/targets/:target_id/integrations/slack/",
+			handleFunctions.SlackIntegrationAPI.TargetsTargetIdIntegrationsSlackPut,
+		},
+		{
+			"TargetsAllAverageFixTimeGet",
+			http.MethodGet,
+			"/targets/all/average_fix_time/",
+			handleFunctions.StatisticsAPI.TargetsAllAverageFixTimeGet,
+		},
+		{
+			"TargetsAllNeedsAttentionPieGet",
+			http.MethodGet,
+			"/targets/all/needs_attention_pie/",
+			handleFunctions.StatisticsAPI.TargetsAllNeedsAttentionPieGet,
+		},
+		{
+			"TargetsAllNeedsAttentionTopGet",
+			http.MethodGet,
+			"/targets/all/needs_attention_top/",
+			handleFunctions.StatisticsAPI.TargetsAllNeedsAttentionTopGet,
+		},
+		{
+			"TargetsAllRiskTrendGet",
+			http.MethodGet,
+			"/targets/all/risk_trend/",
+			handleFunctions.StatisticsAPI.TargetsAllRiskTrendGet,
+		},
+		{
+			"TargetsAllSeverityTrendGet",
+			http.MethodGet,
+			"/targets/all/severity_trend/",
+			handleFunctions.StatisticsAPI.TargetsAllSeverityTrendGet,
+		},
+		{
+			"TargetsAllTopVulnsGet",
+			http.MethodGet,
+			"/targets/all/top_vulns/",
+			handleFunctions.StatisticsAPI.TargetsAllTopVulnsGet,
+		},
+		{
+			"TargetsTargetIdAverageFixTimeGet",
+			http.MethodGet,
+			"/targets/:target_id/average_fix_time/",
+			handleFunctions.StatisticsAPI.TargetsTargetIdAverageFixTimeGet,
+		},
+		{
+			"TargetsTargetIdRiskTrendGet",
+			http.MethodGet,
+			"/targets/:target_id/risk_trend/",
+			handleFunctions.StatisticsAPI.TargetsTargetIdRiskTrendGet,
+		},
+		{
+			"TargetsTargetIdSeverityTrendGet",
+			http.MethodGet,
+			"/targets/:target_id/severity_trend/",
+			handleFunctions.StatisticsAPI.TargetsTargetIdSeverityTrendGet,
+		},
+		{
+			"TargetsTargetIdTopVulnsGet",
+			http.MethodGet,
+			"/targets/:target_id/top_vulns/",
+			handleFunctions.StatisticsAPI.TargetsTargetIdTopVulnsGet,
+		},
+		{
+			"TargetsGet",
+			http.MethodGet,
+			"/targets/",
+			handleFunctions.TargetsAPI.TargetsGet,
+		},
+		{
+			"TargetsIdDelete",
+			http.MethodDelete,
+			"/targets/:id/",
+			handleFunctions.TargetsAPI.TargetsIdDelete,
+		},
+		{
+			"TargetsIdGet",
+			http.MethodGet,
+			"/targets/:id/",
+			handleFunctions.TargetsAPI.TargetsIdGet,
+		},
+		{
+			"TargetsIdPatch",
+			http.MethodPatch,
+			"/targets/:id/",
+			handleFunctions.TargetsAPI.TargetsIdPatch,
+		},
+		{
+			"TargetsIdPut",
+			http.MethodPut,
+			"/targets/:id/",
+			handleFunctions.TargetsAPI.TargetsIdPut,
+		},
+		{
+			"TargetsPost",
+			http.MethodPost,
+			"/targets/",
+			handleFunctions.TargetsAPI.TargetsPost,
+		},
+		{
+			"ProfileChangePasswordPost",
+			http.MethodPost,
+			"/profile/change_password/",
+			handleFunctions.UsersAPI.ProfileChangePasswordPost,
+		},
+		{
+			"ProfileGet",
+			http.MethodGet,
+			"/profile/",
+			handleFunctions.UsersAPI.ProfileGet,
+		},
+		{
+			"UsersGet",
+			http.MethodGet,
+			"/users/",
+			handleFunctions.UsersAPI.UsersGet,
+		},
+		{
+			"UsersIdDelete",
+			http.MethodDelete,
+			"/users/:id/",
+			handleFunctions.UsersAPI.UsersIdDelete,
+		},
+		{
+			"UsersIdGet",
+			http.MethodGet,
+			"/users/:id/",
+			handleFunctions.UsersAPI.UsersIdGet,
+		},
+		{
+			"UsersIdPatch",
+			http.MethodPatch,
+			"/users/:id/",
+			handleFunctions.UsersAPI.UsersIdPatch,
+		},
+		{
+			"UsersIdPut",
+			http.MethodPut,
+			"/users/:id/",
+			handleFunctions.UsersAPI.UsersIdPut,
+		},
+		{
+			"UsersPost",
+			http.MethodPost,
+			"/users/",
+			handleFunctions.UsersAPI.UsersPost,
+		},
+		{
+			"VulnerabilityDefinitionsGet",
+			http.MethodGet,
+			"/vulnerability_definitions/",
+			handleFunctions.VulnerabilitiesAPI.VulnerabilityDefinitionsGet,
+		},
+		{
+			"VulnerabilityDefinitionsIdGet",
+			http.MethodGet,
+			"/vulnerability_definitions/:id/",
+			handleFunctions.VulnerabilitiesAPI.VulnerabilityDefinitionsIdGet,
+		},
+	}
+}
