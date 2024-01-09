@@ -14,7 +14,8 @@ wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory
 # asana.com/1.0
 wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/asana.com/1.0/openapi.yaml -O swagger/asana.yaml
 # atlassian.com/jira/1001.0.0-SNAPSHOT
-wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/atlassian.com/jira/1001.0.0-SNAPSHOT/openapi.yaml -O swagger/atlassian-jira.yaml
+# Running into issues with this one
+#wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/atlassian.com/jira/1001.0.0-SNAPSHOT/openapi.yaml -O swagger/atlassian-jira.yaml
 # bbc.co.uk/1.0.0
 wget https://raw.githubusercontent.com/api-extraction-examples/openapi-directory/main/APIs/bbc.co.uk/1.0.0/swagger.yaml -O swagger/bbc.yaml
 # circleci.com/v1
