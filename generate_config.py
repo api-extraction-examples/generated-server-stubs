@@ -7,7 +7,7 @@ frameworks_map = {
     'aspnetcore': 'dotnet',
     'go-gin-server': 'go',
     'go-server': 'go',
-    'nodejs-express-server': 'nodejs',
+    'nodejs-express-server': 'js',
     'python-flask': 'python',
     'spring': 'spring'
 }

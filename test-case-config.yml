@@ -11,9 +11,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/1password-local.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/1password-local
-  1password-local-nodejs:
+  1password-local-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/1password-local.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/1password-local
@@ -41,9 +41,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/amazonaws-iam.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/amazonaws-iam
-  amazonaws-iam-nodejs:
+  amazonaws-iam-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/amazonaws-iam.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/amazonaws-iam
@@ -71,9 +71,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/apache-airflow.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/apache-airflow
-  apache-airflow-nodejs:
+  apache-airflow-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/apache-airflow.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/apache-airflow
@@ -101,9 +101,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/apple-app-store-connect.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/apple-app-store-connect
-  apple-app-store-connect-nodejs:
+  apple-app-store-connect-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/apple-app-store-connect.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/apple-app-store-connect
@@ -131,9 +131,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/asana.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/asana
-  asana-nodejs:
+  asana-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/asana.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/asana
@@ -149,36 +149,6 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/asana.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/spring/asana
-  atlassian-jira-dotnet:
-    github_stars: 0
-    language: dotnet
-    provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/atlassian-jira.yaml
-    repo: https://github.com/api-extraction-examples/generated-specs
-    subdirectory: server-code/aspnetcore/atlassian-jira
-  atlassian-jira-go:
-    github_stars: 0
-    language: go
-    provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/atlassian-jira.yaml
-    repo: https://github.com/api-extraction-examples/generated-specs
-    subdirectory: server-code/go-server/atlassian-jira
-  atlassian-jira-nodejs:
-    github_stars: 0
-    language: nodejs
-    provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/atlassian-jira.yaml
-    repo: https://github.com/api-extraction-examples/generated-specs
-    subdirectory: server-code/nodejs-express-server/atlassian-jira
-  atlassian-jira-python:
-    github_stars: 0
-    language: python
-    provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/atlassian-jira.yaml
-    repo: https://github.com/api-extraction-examples/generated-specs
-    subdirectory: server-code/python-flask/atlassian-jira
-  atlassian-jira-spring:
-    github_stars: 0
-    language: spring
-    provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/atlassian-jira.yaml
-    repo: https://github.com/api-extraction-examples/generated-specs
-    subdirectory: server-code/spring/atlassian-jira
   bbc-dotnet:
     github_stars: 0
     language: dotnet
@@ -191,9 +161,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/bbc.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/bbc
-  bbc-nodejs:
+  bbc-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/bbc.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/bbc
@@ -221,9 +191,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/circleci.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/circleci
-  circleci-nodejs:
+  circleci-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/circleci.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/circleci
@@ -251,9 +221,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/collegefootballdata.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/collegefootballdata
-  collegefootballdata-nodejs:
+  collegefootballdata-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/collegefootballdata.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/collegefootballdata
@@ -281,9 +251,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/covid19-api.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/covid19-api
-  covid19-api-nodejs:
+  covid19-api-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/covid19-api.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/covid19-api
@@ -311,9 +281,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/datasette-local.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/datasette-local
-  datasette-local-nodejs:
+  datasette-local-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/datasette-local.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/datasette-local
@@ -341,9 +311,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/ebay-sell-account.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/ebay-sell-account
-  ebay-sell-account-nodejs:
+  ebay-sell-account-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/ebay-sell-account.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/ebay-sell-account
@@ -371,9 +341,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/epa-air.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/epa-air
-  epa-air-nodejs:
+  epa-air-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/epa-air.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/epa-air
@@ -401,9 +371,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/gsa.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/gsa
-  gsa-nodejs:
+  gsa-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/gsa.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/gsa
@@ -431,9 +401,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/httpbin.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/httpbin
-  httpbin-nodejs:
+  httpbin-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/httpbin.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/httpbin
@@ -461,9 +431,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/instagram.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/instagram
-  instagram-nodejs:
+  instagram-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/instagram.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/instagram
@@ -491,9 +461,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/intel-product-catalogue.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/intel-product-catalogue
-  intel-product-catalogue-nodejs:
+  intel-product-catalogue-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/intel-product-catalogue.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/intel-product-catalogue
@@ -521,9 +491,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/launchdarkly.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/launchdarkly
-  launchdarkly-nodejs:
+  launchdarkly-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/launchdarkly.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/launchdarkly
@@ -551,9 +521,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/linux-foundation.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/linux-foundation
-  linux-foundation-nodejs:
+  linux-foundation-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/linux-foundation.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/linux-foundation
@@ -581,9 +551,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/lyft.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/lyft
-  lyft-nodejs:
+  lyft-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/lyft.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/lyft
@@ -611,9 +581,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/mastercard-open-banking-connect.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/mastercard-open-banking-connect
-  mastercard-open-banking-connect-nodejs:
+  mastercard-open-banking-connect-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/mastercard-open-banking-connect.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/mastercard-open-banking-connect
@@ -641,9 +611,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/mastodon.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/mastodon
-  mastodon-nodejs:
+  mastodon-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/mastodon.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/mastodon
@@ -671,9 +641,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/medium.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/medium
-  medium-nodejs:
+  medium-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/medium.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/medium
@@ -701,9 +671,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/mercedes-benz.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/mercedes-benz
-  mercedes-benz-nodejs:
+  mercedes-benz-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/mercedes-benz.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/mercedes-benz
@@ -731,9 +701,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/nba.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/nba
-  nba-nodejs:
+  nba-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/nba.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/nba
@@ -761,9 +731,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/netlify.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/netlify
-  netlify-nodejs:
+  netlify-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/netlify.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/netlify
@@ -791,9 +761,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/nytimes-top-stories.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/nytimes-top-stories
-  nytimes-top-stories-nodejs:
+  nytimes-top-stories-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/nytimes-top-stories.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/nytimes-top-stories
@@ -821,9 +791,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/parliament-bills.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/parliament-bills
-  parliament-bills-nodejs:
+  parliament-bills-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/parliament-bills.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/parliament-bills
@@ -851,9 +821,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/testfire.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/testfire
-  testfire-nodejs:
+  testfire-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/testfire.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/testfire
@@ -881,9 +851,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/twilio-notify.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/twilio-notify
-  twilio-notify-nodejs:
+  twilio-notify-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/twilio-notify.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/twilio-notify
@@ -911,9 +881,9 @@ jobs:
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/zapier.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/go-server/zapier
-  zapier-nodejs:
+  zapier-js:
     github_stars: 0
-    language: nodejs
+    language: js
     provided_swagger_file: https://raw.githubusercontent.com/api-extraction-examples/generated-specs/main/swagger/zapier.yaml
     repo: https://github.com/api-extraction-examples/generated-specs
     subdirectory: server-code/nodejs-express-server/zapier
